@@ -17,7 +17,7 @@ from contest.config import config_local
 if __name__ == '__main__':
 	debug = False
 	debug2 = True
-	debug3 = True # TODO: this sets the script to just iterate over a fixed results
+	debug3 = False # TODO: this sets the script to just iterate over a fixed results
 	""" connect to mysql """
 	
 	""" select as much ids as you want then enque this as a replay job. 
@@ -27,7 +27,8 @@ if __name__ == '__main__':
 	IMPLICIT = True
 	SAVE_ITEM_BY_USER = False
 	SAVE_HADOOP_SINK = True
-	hS = HadoopSink('/tmp/dump') 
+	SAVE_DIMENSION_LIST = True
+	hS = HadoopSink('/media/trekstor/test_dump') 
 	
 	cycle_count = 1000000 #number of items to fetch at once
 	n_maxrows = 100000
@@ -77,6 +78,15 @@ if __name__ == '__main__':
 				rating = 1
 				
 				hS.save_mode2(userid, itemid, domainid, date)
+			
+			if (SAVE_DIMENSION_LIST):
+				dimension = 'user_ids'
+				dL = DimensionListModel( dimension )
+				if(debug):
+					print "userid:\t" + str(flattenedJson['client_id'])
+				dL.save( dimension_id = flattenedJson['client_id'], timestamp = timestamp_sec )
+	
+			
 			
 			n += 1
 			if ( n % cycle_count == 0 and debug2):
