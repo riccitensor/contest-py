@@ -12,7 +12,7 @@ from contest.packages.models.RecommendationList import RecommendationList
 import redis
 import random
 
-class fallback_random(baseRecommender):
+class Random_Recommender(baseRecommender):
 	'''
 	this will be the most naive recommender which just outputs random recommendations
 	'''
@@ -21,13 +21,24 @@ class fallback_random(baseRecommender):
 	userid = None
 
 	def __init__(self, user_id):
-		super(fallback_random, self).__init__()
+		super(Random_Recommender, self).__init__()
 		self.redis_con = redis.Redis("localhost")
 		
 		self.user_id = user_id
 		self.key = 'fallback_random:userid:{0:d}'.format(user_id)   
 		
-	def getRecommendation(self, userid):
+	def get_recommendation(self, N, remove = False):
+		""" fetch a random recommendation 
+		@param N number of recommendations
+		@param itemids which should be ignored
+		"""
+
+		resultSet = self.redis_con.zrange(self.key, 0, N-1)
+		# todo remove the items from the resultest
+		if (remove): self.invalidate_recommended_items(resultSet)
+			
+		return resultSet
+
 		'''
 		@param userid: even though the recommendations are random we have to exclude items we already presented '''
 		# todo grab the items and create a random list
@@ -44,7 +55,7 @@ class fallback_random(baseRecommender):
 		return recList
 		
 		
-	def train(self, userid, N, ignores=[]):
+	def train(self, N = 10, ignores=[]):
 		""" fetch a random recommendation 
 		@param N number of recommendations
 		@param itemids which should be ignored
@@ -65,7 +76,7 @@ class fallback_random(baseRecommender):
 					i += 1
 		else:
 			for i in xrange(N):
-				recommendable_item = self.redis_con.srandmember(self.itemrecList)
+				recommendable_item = self.redis_con.srandmember(self.itemList)
 				recList.append(recommendable_item)
 				
 		#print recList
@@ -83,15 +94,20 @@ class fallback_random(baseRecommender):
 	def set_recommendables(self, itemid):
 		""" set a recommendable item """
 		logging.debug('fallback_random: saving a recommendable item' + str(itemid))
-		''' @todo: move this to the writeback methods since the recommender has nothing to do with saving the data '''
+		''' @TODO: move this to the writeback methods since the recommender has nothing to do with saving the data '''
 		self.redis_con.sadd(self.itemList, itemid)
+
 
 	def del_recommendables(self, itemid):
 		""" delete an recommendable item again """
-		''' @todo: move this to the writeback methods since the recommender has nothing to do with managing the data '''
+		''' @TODO: move this to the writeback methods since the recommender has nothing to do with managing the data '''
 		self.redis_con.srem(self.itemList, itemid)
 
-
+	def invalidate_recommended_items(self, recommendet_item_list):
+		''' already recommendet items should be shown again so soon
+		'''
+		for item in recommendet_item_list:
+			self.redis_con.zrem(self.key, item)
 	
 if __name__ == '__main__':
 	'''

@@ -4,7 +4,7 @@ Created on 23.05.2012
 @author: christian.winkelmann@plista.com
 '''
 import unittest
-from contest.packages.recommenders.fallback_random import fallback_random
+from contest.packages.recommenders.Random_Recommender import Random_Recommender
 
 
 class TestRandomRecommender(unittest.TestCase):
@@ -20,27 +20,32 @@ class TestRandomRecommender(unittest.TestCase):
 	def insertData(self):
 		''' '''
 
-	def testName(self):
+	def test_Get_Recommendation(self):
 		userid = 123
-		fb = fallback_random( userid )
+		N = 3
+		fb = Random_Recommender( userid )
 	
 		## todo replace this with a writeback utility	
-		fb.set_recommendables( itemid = 6 )
-		fb.set_recommendables( itemid = 7 )
-		fb.set_recommendables( itemid = 8 )
-		fb.set_recommendables( itemid = 9 )
-		fb.set_recommendables( itemid = 10 )
-		fb.set_recommendables( itemid = 11 )
-		fb.set_recommendables( itemid = 12 )
-		fb.set_recommendables( itemid = 13 )
+		for item_id in xrange(15):
+			fb.set_recommendables( itemid = item_id )
 		
-		fb.train( userid, 5 )
 		
-		resultSet = fb.get_recommendation( N=3 )
-		print 'result'
-		print resultSet
-		#fb.del_recommendables(12345)
-		#fb.del_recommendables(67890)
+		fb.train( )
+		
+		resultSet_old = fb.get_recommendation( N=N, remove = False )
+		print resultSet_old
+		self.assertEqual(len(resultSet_old), N, 'the resulting recommendation have the wrong number')
+		
+		resultSet_new = fb.get_recommendation( N=N, remove = True )
+		print resultSet_new
+		self.assertEqual(len(resultSet_new), N, 'the resulting recommendation have the wrong number')
+		self.assertEqual( resultSet_new, resultSet_old, 'the resultsets are not the same')
+		
+		resultSet_newest = fb.get_recommendation( N=N, remove = True )
+		print resultSet_newest
+		self.assertEqual( len(resultSet_newest), N, 'the resulting recommendation have the wrong number')
+		self.assertNotEqual( resultSet_newest, resultSet_new, 'the resultsets are the same')
+
 
 
 if __name__ == "__main__":
