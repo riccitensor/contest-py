@@ -20,9 +20,6 @@ class baseModel(object):
         Constructor
         '''
         
-#        self.dbconn = cql.connect(config.cassandra_host, config.cassandra_port )
-#        self.dbconn = self.dbconn
-#        self.cursor = self.dbconn.cursor()
         if ( mode == 'cassandra' ):
             self.conn = CassandraConnection()
         else:
