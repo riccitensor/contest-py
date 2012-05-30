@@ -1,0 +1,10 @@
+To copy a local xml dump of a wikipedia do the following
+( more information at http://www.mediawiki.org/wiki/Mwdumper )
+
+
+1. download a dump from http://dumps.wikimedia.org/backup-index.html "dewiki" is the german wikipedia 
+2.1 I use the schema "wikipedia" and thats why "wikipedia" is written in the mwdumper line 
+2.2 execute the sql script "tables.sql" on your local machine
+3. execute the mwdumper.jar 
+java -jar mwdumper.jar --format=sql:1.5 ~/Downloads/dewiki-20110729-pages-articles.xml.bz2 | mysql -u root -p wikipedia
+

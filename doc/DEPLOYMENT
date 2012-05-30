@@ -1,0 +1,21 @@
+If any dependencies are fulfilled.
+
+
+======= COPY to destination server =======
+// scp -i contest_4.pem ubuntu@ec2-176-34-200-138.eu-west-1.compute.amazonaws.com
+
+scp -i ~/Downloads/contest_4.pem Transport-0.1.0.tar.gz ubuntu@ec2-176-34-200-138.eu-west-1.compute.amazonaws.com:/home/ubuntu
+
+
+======= INSTALL with pip =================
+activate virtual env first. 
+$ . env/bin/activate
+pip install Transport-0.1.0.tar.gz 
+
+this will install the python code into:
+/home/ubuntu/python_env/.../usr/local/lib/python2.7/site-packages/
+# /usr/local/lib/python2.7/dist-packages/src
+
+======= SETTING VIRTUAL ENV ==============
+depending on the virtual Env set something like
+export PYTHONPATH=/..path to env../dist/virtual_env/lib/python2.7/site-packages/contest

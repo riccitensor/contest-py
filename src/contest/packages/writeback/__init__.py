@@ -1,0 +1,1 @@
+# main class for logging and saving incoming data to all kinds of data storages

@@ -7,10 +7,9 @@ replay data from a mysql database
 '''
 import _mysql
 import time as time2
-from datetime import datetime, date, time
+from datetime import date
 
 from contest.packages.models.HadoopSink import HadoopSink
-from contest.packages.helper.getTimestamp import getTimestamp
 
 from contest.config import config_local
 
@@ -18,18 +17,12 @@ from contest.config import config_local
 if __name__ == '__main__':
 	debug = False
 	debug2 = True
+	debug3 = True # TODO: this sets the script to just iterate over a fixed results
 	""" connect to mysql """
 	
 	""" select as much ids as you want then enque this as a replay job. 
 	Each worker will then fetch the task from the queue and request to 
 	the Request handler then """
-	
-	
-	mysql_host = config_local.mysql_host
-	user = config_local.mysql_user
-	password = config_local.mysql_password
-	db=_mysql.connect(host=mysql_host,user=user,
-				  passwd=password,db="db_youfilter")
 	
 	IMPLICIT = True
 	SAVE_ITEM_BY_USER = False
@@ -37,24 +30,38 @@ if __name__ == '__main__':
 	hS = HadoopSink('/tmp/dump') 
 	
 	cycle_count = 1000000 #number of items to fetch at once
+	n_maxrows = 100000
 	
-	if not IMPLICIT:
-		sql = """SELECT userid, itemid, src, date as timestamp FROM db_youfilter.clickfeedback c \
-		WHERE 1"""
 	
-	else :
-		sql = """SELECT userid, itemid, date, domainid as timestamp FROM db_archive.implicitratings c \
-		WHERE 1"""
+	if (not debug3):
+		mysql_host = config_local.mysql_host
+		user = config_local.mysql_user
+		password = config_local.mysql_password
+		db=_mysql.connect(host=mysql_host,user=user,
+					  passwd=password,db="db_youfilter")
 		
-	db.query(sql)
-	r=db.use_result()
+	
+		if not IMPLICIT:
+			sql = """SELECT userid, itemid, src, date as timestamp FROM db_youfilter.clickfeedback c \
+			WHERE 1"""
+		
+		else :
+			sql = """SELECT userid, itemid, date, domainid as timestamp FROM db_archive.implicitratings c \
+			WHERE 1"""
+			
+		db.query(sql)
+		r=db.use_result()
+		result = r.fetch_row(maxrows = n_maxrows) # fetch N row maximum
+		
+	
 	
 	replay_time = time2.time()
-	
-	result = r.fetch_row(maxrows = 100000) # fetch N row maximum
-	
 	n = 1
-	print "start"
+	print "import data"
+	
+	if (debug3):
+		result = ((1,2,3,4),(4,5,6,7))
+	
 	while (result):
 		for result_item in result:
 			
@@ -72,15 +79,18 @@ if __name__ == '__main__':
 				hS.save_mode2(userid, itemid, domainid, date)
 			
 			n += 1
+			if ( n % cycle_count == 0 and debug2):
+				print n
 		
-				
-		result = r.fetch_row(maxrows = 100000) # fetch N row maximum
+		if (not debug3):		
+			result = r.fetch_row(maxrows = n_maxrows) # fetch N row maximum
+		else: result = False
 		
-		if ( n % cycle_count == 0 and debug2):
-			print n
 					
-	db.close() #close the database connection
+	if (not debug3): db.close() #close the database connection
 	replay_time = time2.time() - replay_time
+	
 	print "time it took: " + str(replay_time)
+	print 'It took {0:1f} seconds per item'.format(replay_time/n)
 	
 	

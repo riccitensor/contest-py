@@ -1,3 +1,4 @@
 # compiled python executeables 
 
 *.pyc
+/output.log

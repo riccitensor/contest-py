@@ -1,0 +1,43 @@
+
+The web-service will provide several domains of functions and can by called by 
+
+If you need more information about curl
+http://curl.haxx.se/docs/httpscripting.html
+
+Test functions use these at first to build test functions inside you client script
+
+just hello world
+$ curl http://localhost:5000/test/hello_world
+Hello World! 
+
+test if GET works in general
+$ curl http://localhost:5000/test/http_param
+GET 
+
+test if POST works in general
+curl --data "" http://localhost:5000/test/http_param_simple
+POST
+
+test if specific GET Parameters get returned
+curl "http://localhost:5000/test/http_param_ext?id=1234&text=This_A_Test"
+text: This_A_Test str: 1234
+
+test if specific POST Parameters get returned
+curl --data "id=1905&text=This_A_Test" http://localhost:5000/test/http_param_ext
+text: This_A_Test str: 1905
+
+test if the gensim Models can be instantiated
+curl http://localhost:5000/test/gensim/available
+ok
+
+
+for using the Gensim Algorithm some steps will be needed:
+1. initializing the model by: ?id=<string>&algorithm=<nameOftheAlgorithm>
+2. filling training data: document=<a string with the whole document>  
+3. kick off the training after all data is save locally
+4. start indexing. When the model is trained models can be indexed. 
+	id=an id
+	document=some document
+5. querying either id querying or fulltext searches are possible
+
+

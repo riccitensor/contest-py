@@ -1,0 +1,80 @@
+/**
+ideas behind some of the models
+
+**/
+
+
+DimensionList :
+
+        seconds : { sec1 : "", sec2 : "", sec3 : "", ... }
+        -> minutes
+        -> hours
+        -> days
+        -> weeks
+        }
+        
+        
+        
+        items_by_seconds_<sec1> : { item1 : "", item2 : "" , ....  }
+        items_by_seconds_<sec2> : { item1 : "", item2 : "" , ....
+        
+        }
+        -> items_by_minutes
+        -> items_by_hours
+        ...
+        
+        
+        users_by_seconds_<sec1> : { user1 : "", user2 : "", user3 : "" }
+        -> user_by_minutes_<min1> : { ... }
+        ...
+        
+        browsers_by_seconds ...
+
+
+Distributed Counters : ( # this is quivalent to the dimensionList
+
+        users_by_seconds_<sec1> : { userid1 : counter, itemid2 : counter }
+        -> users_by_minutes : ...
+        
+....		
+        
+        }
+        items_by_user<X> : {
+        	
+        }
+
+
+DimensionA_By_DimensionB : 
+
+	items_By_userid<Y>_bySeconds : { sec1 [uuid] : itemid1, sec1 : itemid2 } 
+	items_By_userid<Z>_bySeconds : { sec1 [uuid] : itemid1, sec1 : itemid3 }
+	
+	
+	
+	
+	 
+		}   
+		
+		
+		
+Give me all items the user has seen in the last 12 hours 
+-> itemsByUser<X> : {  
+
+}      
+
+high cardinality!?!?
+
+impressions: {
+	primary_key = impression_id,
+	user_id = k,
+	item_id = i
+	}
+	
+==================================================================================================	
+lets combine secondary indexing and wide rows
+
+user_id_
+
+
+
+}
