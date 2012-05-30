@@ -1,18 +1,18 @@
 '''
 Created on 31.01.2012
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 import unittest
-from config import config_global
-from config import config_local
+from contest.config import config_global
+from contest.config import config_local
 import cql
 from cql.cassandra import Cassandra
-from packages.helper.getTimestamp import getTimestamp
+from contest.packages.helper.getTimestamp import getTimestamp
 import time
-from packages.models.DimensionListModel import DimensionListModel
-from migrations.setup_keyspaces import Setup_Keyspaces
-from migrations._007_dimensionLists import dimensionListsMigration
+from contest.packages.models.DimensionListModel import DimensionListModel
+from contest.migrations.setup_keyspaces import Setup_Keyspaces
+from contest.migrations._007_dimensionLists import dimensionListsMigration
 from random import uniform
 
 
@@ -52,7 +52,7 @@ class TestDimensionListModel(unittest.TestCase):
         """ test if the stream of information is written as wished
         """
         dimension = 'user_ids'
-        self.dL = DimensionListModel( dimension )
+        self.dL = DimensionListModel( dimension, 'cassandra' )
 
         
         timestamp = 4000 # this equals hour 2
@@ -67,7 +67,8 @@ class TestDimensionListModel(unittest.TestCase):
         print timestamp
         mylist = self.dL.getByTime(timestamp)
         
-        
+        print "mylist: "
+        print mylist
         self.assertEqual(mylist['dimension_name'], u'user_ids_by_seconds_4000', "the entries are not equal")    
         self.assertEqual(mylist[0], 0 , "the entries are not equal")
         self.assertEqual(len( mylist ), 3, "the list has the wrong length")
@@ -77,7 +78,7 @@ class TestDimensionListModel(unittest.TestCase):
         """ test if the we can save impressions by minute
         """
         dimension = 'user_ids'
-        self.dL = DimensionListModel( dimension )
+        self.dL = DimensionListModel( dimension, 'cassandra' )
 
         
         timestamp = 0 # this equals hour 2
@@ -92,7 +93,7 @@ class TestDimensionListModel(unittest.TestCase):
         print timestamp
         mylist = self.dL.getByTime(timestamp)
         
-#        print mylist
+        print mylist
         
         self.assertEqual(mylist['dimension_name'], u'user_ids_by_seconds_4000', "the entries are not equal")    
         self.assertEqual(mylist[0], 0 , "the entries are not equal")
@@ -107,7 +108,7 @@ class TestDimensionListModel(unittest.TestCase):
         """ test if the stream of information is written as wished
         """
         dimension = 'user_ids'
-        self.dL = DimensionListModel( dimension )
+        self.dL = DimensionListModel( dimension, 'cassandra' )
 
         
         timestamp = 4000 # this equals hour 2
@@ -136,7 +137,7 @@ class TestDimensionListModel(unittest.TestCase):
         """ test if the stream of information is written as wished
         """
         dimension = 'user_ids'
-        self.dL = DimensionListModel( dimension )
+        self.dL = DimensionListModel( dimension, 'cassandra' )
 
         self.dL.save( dimension_id = 1, timestamp = 59 )
         self.dL.save( dimension_id = 2, timestamp = 59 )
@@ -205,17 +206,20 @@ class TestDimensionListModel(unittest.TestCase):
 
             
         
-    def _testGetHourFromTimeStamp(self):
-        """ @todo: move this into a seperate unit Test for the getTimestamp Class but for now it is perfect here
+    def testGetHourFromTimeStamp(self):
+        """ @TODO: move this into a seperate unit Test for the getTimestamp Class but for now it is perfect here
         """
         timestamp = 4000
         binId = getTimestamp.gettimeStampIn_Hours( timestamp )
         self.assertEqual(binId, 1, "the conversion from timestamp to hour is wrong")
         
-    def _testGetTimestampFromHour(self):
+    def testGetTimestampFromHour(self):
+    	""" @TODO: move this into a seperate unit Test for the getTimestamp Class but for now it is perfect here
+        """
         hour = 1
+        val = 3600
         timestamp = getTimestamp.getTimeStampFromHours(hour)
-        self.assertEqual(timestamp, 3601, "the conversion from timestamp to hour is wrong")
+        self.assertEqual(timestamp, val, "the conversion from timestamp {0:1d} to hour {1:1d} is wrong".format(timestamp, val))
     
     
     

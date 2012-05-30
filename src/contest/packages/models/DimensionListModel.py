@@ -34,9 +34,11 @@ class DimensionListModel(baseModel):
          
     
     def __init__(self, dimensionName, mode):
-        """ @param dimensionName: The name of the dimension like user_id, impression_id, browser_id...
+        """ 
+        @param dimensionName: The name of the dimension like user_id, impression_id, browser_id...
+        @param mode: database to use, like redis oder cassandra 
         """
-        super(DimensionListModel, self).__init__()
+        super(DimensionListModel, self).__init__(mode)
 
         self.column_family = config_global.dbname_dimensionList
         self.dimensionList = config_global.dbname_dimensionList_rowKeys
@@ -262,7 +264,7 @@ if __name__ == '__main__':
     print getTimestamp.getTimeStampFromHours( binId )
     
     #print dL.getAll()
-    print "binbify"
+    print "binify"
     x = ( dL.binify('hours', binId-1, binId) )
     print len( x )
     
