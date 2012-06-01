@@ -5,6 +5,8 @@ central station for all incoming messages
 
 @author: christian.winkelmann@plista.com
 '''
+from contest.config import config_global
+from contest.packages.models.HadoopSink import HadoopSink
 from contest.packages.models.rawJsonModel import rawJsonModel
 from contest.packages.message_parsers.fullParser import FullContestMessageParser
 from contest.packages.recommenders.Random_Recommender import Random_Recommender
@@ -14,7 +16,7 @@ class SaveMessage(QueueBase):
 	rawJson = None
 	fullyParsed = None
 
-	def __init__(self, message, async=False, api = 'contest', backends = ()):
+	def __init__(self):
 		'''
 		  get the message, parse it and then save
 		  '''
@@ -23,8 +25,10 @@ class SaveMessage(QueueBase):
 
 
 	def save(self, message, async=False, api = 'contest', backends = ()):
+		"""
 
-		if (not async):
+		"""
+		if (not async): # save the data instantly
 
 			if api == 'contest':
 				fullParsedDataModel = FullContestMessageParser()
@@ -45,8 +49,13 @@ class SaveMessage(QueueBase):
 
 				additional_filter = {'domainid' : domainid}
 
-				fb = Random_Recommender( userid )
-				fb.set_recommendables(itemid, additional_filter)
+				if config_global.SAVE_RANDOM_RECOMMENDER in backends:
+					fb = Random_Recommender( )
+					fb.set_recommendables(itemid, additional_filter)
+				if config_global.SAVE_HADOOP_SINK in backends:
+					hS = HadoopSink(append = True)
+					rating = 1
+					hS.save_mode2(userid, itemid, domainid, timestamp)
 
 
 
