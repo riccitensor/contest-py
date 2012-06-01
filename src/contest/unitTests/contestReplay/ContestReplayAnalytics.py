@@ -6,8 +6,8 @@ Created on 28.01.2012
 
 from contest.config import config_global
 from contest.config import config_local
-import cql
-from cql.cassandra import Cassandra
+
+
 from contest.packages.helper.getTimestamp import getTimestamp
 import time
 
@@ -74,7 +74,7 @@ if __name__ == '__main__':
     
     """ 
     
-    dL = DimensionListModel('user_ids')
+    dL = DimensionListModel('user_ids', mode = 'redis')
     """
     userList = dL.getByTime(1319617057, 1319617424, binSize = 'seconds')
     print len( userList ) """
