@@ -31,34 +31,16 @@ class rawJsonDumpWorker(QueueBase):
 	def callback(self, ch, method, properties, body):
 
 		print body
+
+		# todo get the message from the body
+		# todo parse relevant options from the body
 		#print "rawJsonDump received a task %r" % (body)
 		timestamp = time.time()
 		
 		raw = rawJsonModel( self.mode )
 		raw.parse(body)
-		raw.writeback(); 
+		raw.save()
 
-	
-	
-		
-	
-	def writeToCassandra(self, timestamp, body):
-		''' @todo: implement this '''
-		""" no we are going to write the data into cassandra """
-		
-		""" 1. write down the raw data for later use with the timestamp of input """
-		
-		""" 2. save the itemid as they are. No more data. Usefull for 'joins' """
-			
-		""" 3. save the userid as they are. """
-		
-		""" 4. save the whole item """
-		
-		
-
-			
-	
-	
 		
 if __name__ == '__main__':
 	""" this class has an enqueue function and a worker function as well
