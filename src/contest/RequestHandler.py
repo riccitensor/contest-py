@@ -80,7 +80,7 @@ def incoming_contest_call():
         recommendations_message = df.default_parse(message)
 
         logging.debug('recommendation message:' + str(recommendations_message))
-        if ( recommendations_message == None ): return ""
+        if recommendations_message == None : return ""
         else: return recommendations_message
         
         return 'OK' #str(message)

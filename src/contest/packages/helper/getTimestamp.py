@@ -130,7 +130,7 @@ class getTimestamp(object):
         if ( target == origin ):
             factor = 1
         
-        timestampStart = timestampStart * factor
+        timestampStart *= factor
         timestampEnd = timestampEnd * factor
         
         if ((timestampEnd - timestampStart) > 1 ):

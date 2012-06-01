@@ -11,8 +11,8 @@ import cql
 class itemTableFull_Class(object):
     
     
-    def __init__(self, *args, **kwargs):
-        object.__init__(self, *args, **kwargs)
+    def __init__(self):
+        object.__init__(self)
         
         dbconn = cql.connect(config_local.cassandra_host, config_local.cassandra_port ) 
         cursor = dbconn.cursor()

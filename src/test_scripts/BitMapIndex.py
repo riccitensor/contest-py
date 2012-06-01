@@ -35,7 +35,7 @@ class BitMapIndex(object):
             
             if ( (bitmap == value) ):
                 resultSet.append(row_key)
-            row_key = row_key + 1
+            row_key =+ 1
         return resultSet
     
     
