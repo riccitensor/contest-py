@@ -13,8 +13,8 @@ import redis
 from cql.cassandra import Cassandra
 from baseModel import baseModel
 from contest.packages.helper.getTimestamp import getTimestamp
-import time
-from sets import Set
+#import time
+#from sets import Set
 
 
 class RecommendationList(baseModel):

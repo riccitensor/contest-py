@@ -15,7 +15,7 @@ class baseModel(object):
     base Model connection
     '''
 
-    def __init__(self, mode):
+    def __init__(self, mode = 'cassandra'):
         '''
         Constructor
         '''
