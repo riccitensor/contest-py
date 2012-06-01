@@ -38,7 +38,7 @@ class remoteWorker(object):
     def callback(self, ch, method, properties, body):
         #time.sleep(0.5)
         print " [2] Received %r" % (body) + "and written to redis"
-        self.enqueue(body)
+        #self.enqueue(body)
         
         
     def enqueue(self, _body):
