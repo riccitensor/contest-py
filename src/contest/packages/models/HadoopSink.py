@@ -13,10 +13,13 @@ class HadoopSink():
 
 	path = '/tmp/one_million_test' 
 	
-	def __init__(self, path = '/tmp/hadoopSink'):
+	def __init__(self, path = '/tmp/hadoopSink', append = False):
 		''' open target write location '''
 		#self.f = open('/tmp/one_million_test', 'w')
-		self.f = open(path, 'w')
+		if (append):
+			self.f = open(path, 'a')
+		else:
+			self.f = open(path, 'w')
 
 	
 	def save_mode1(self, user_id, item_id, rating):
