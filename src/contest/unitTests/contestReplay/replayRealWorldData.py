@@ -85,11 +85,6 @@ if __name__ == '__main__':
 
 
 			"""
-			if( config_global.SAVE_HADOOP_SINK in backends ):
-				rating = 1
-				hS.save_mode2(userid, itemid, domainid, date)
-			"""
-			"""
 			if (SAVE_DIMENSION_LIST):
 				dimension = 'user_ids'
 				dL = DimensionListModel( dimension )
