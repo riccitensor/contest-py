@@ -3,7 +3,7 @@ Created on 16.11.2011
 
 quite basic recommender which bases recommendeing random items, but exclude items alredy seen
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 import redis
 import logging

@@ -1,7 +1,7 @@
 '''
 Created on 08.09.2011
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 
 After Training a Model you need to index documents you actually want to query later. 
 

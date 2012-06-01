@@ -3,7 +3,7 @@ Created on 18.05.2012
 
 Recommender which is recommends depending on the message the best item
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 from contest.packages.recommenders.fallback_random import fallback_random
 

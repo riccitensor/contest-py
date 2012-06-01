@@ -5,7 +5,7 @@ Instead of mocking the database beforehand testing the models we are going to te
 the database 
 
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 
 import unittest

@@ -2,7 +2,7 @@
 Created on 21.10.2011
 just a draft to generate a test dataset by a gaussian distribution
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 """
 from numpy.matlib import rand
 from random import gauss

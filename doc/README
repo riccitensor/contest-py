@@ -1,5 +1,5 @@
 datastax AMI
-startup commands 
+startup commands
 -c contestTest -n 1 -v community
 
 
@@ -9,3 +9,4 @@ add path to contest to
 getData.py
 export PYTHONPATH="/home/karisu/workspace/testProject/src/"
 export PYTHONPATH="/home/karisu/workspace/Transport/contest/"
+

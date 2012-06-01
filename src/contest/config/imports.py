@@ -1,7 +1,7 @@
 '''
 Created on 20.05.2012
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 
 from contest.packages.helper.getTimestamp import getTimestamp

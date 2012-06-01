@@ -4,7 +4,7 @@ Created on 18.10.2011
 for categorization this is needed.
 
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 from algorithm.gensimpy.Query import Query
 import numpy

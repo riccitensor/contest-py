@@ -2,7 +2,7 @@
 '''
 Created on 08.09.2011
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 
 In the Training a model is generated from documents in order to get a "feeling" about the language
 

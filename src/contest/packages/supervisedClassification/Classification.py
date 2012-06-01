@@ -4,7 +4,7 @@ all supervised classification have to inherit from this class
 
 Created on 21.10.2011
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 
 

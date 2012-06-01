@@ -3,7 +3,7 @@ Created on 12.10.2011
 
 small helper class to convert gensim results into json 
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 
 import json

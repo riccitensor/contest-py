@@ -2,7 +2,7 @@
 '''
 Created on 16.12.2011
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 import cql
 from cql.cassandra import Cassandra

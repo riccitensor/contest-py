@@ -4,6 +4,7 @@ Created on 04.12.2011
 config file which holds local changeable configuration data like server names, ports etc
 
 @author: christian.winkelmann@plista.com
+
 '''
 
 config_redis_server_basic = "localhost"

@@ -28,7 +28,7 @@ Now, we are getting a real Insert
 Now, we are getting a real Update
  
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 
 from config import config_global

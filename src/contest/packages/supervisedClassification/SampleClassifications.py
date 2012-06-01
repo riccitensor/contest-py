@@ -1,7 +1,7 @@
 '''
 Created on 18.10.2011
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 from algorithm.db_model.dbabstraction import dbabstraction
 from algorithm.db_model.sql_py import sql_py

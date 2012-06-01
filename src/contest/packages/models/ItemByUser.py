@@ -6,7 +6,7 @@ Columnfamily to store all items which has been seen by a user_id
 This will be used for user based collaborative filtering 
 
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 from contest.config import config_global
 from contest.config import config_local

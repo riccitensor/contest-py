@@ -1,7 +1,7 @@
 '''
 Created on 08.02.2012
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 
 class ratingsDumo(object):

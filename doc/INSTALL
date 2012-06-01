@@ -8,7 +8,7 @@ The webserver is Flask. See http://flask.pocoo.org/ for details. The minimal eff
 1.2. Installation
 add new sources to /etc/apt/sources.list
 
-
+#### TODO split components
 $ sudo apt-get install python-dev python-pip python-virtualenv redis-server sqlite3 byobu dsc dsc-demos opscenter-free 
 
 

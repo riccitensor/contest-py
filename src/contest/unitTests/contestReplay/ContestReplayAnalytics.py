@@ -1,7 +1,7 @@
 '''
 Created on 28.01.2012
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 
 from contest.config import config_global

@@ -1,7 +1,7 @@
 '''
 Created on 12.02.2012
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 import random
 import time

@@ -7,7 +7,7 @@ Created on 22.01.2012
 
 
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 
 from contest.config import config_local, config_global

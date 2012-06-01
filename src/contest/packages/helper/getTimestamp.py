@@ -1,7 +1,7 @@
 '''
 Created on 15.01.2012
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 import time
 #import datetime

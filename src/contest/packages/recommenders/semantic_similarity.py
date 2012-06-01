@@ -1,7 +1,7 @@
 '''
 Created on 24.11.2011
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 
 import packages.test.testGensimHttpApi

@@ -3,7 +3,7 @@ Created on 20.11.2011
 
 basic api functionality
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 import httplib, urllib, json
 

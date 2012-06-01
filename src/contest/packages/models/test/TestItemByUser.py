@@ -1,7 +1,7 @@
 '''
 Created on 05.02.2012
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 import unittest
 from packages.models.ItemByUser import ItemsByUser

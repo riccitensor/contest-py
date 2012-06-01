@@ -4,7 +4,7 @@ Created on 25.11.2011
 This script is calling the Flask Server Gensim Rest Interface
 
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 import unittest
 from contest.packages.controller.http_connector import http_connector

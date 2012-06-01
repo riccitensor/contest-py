@@ -4,7 +4,7 @@ Created on 04.11.2011
 Due to limitations in urllib/beautyfullsoup scrapy should now be used to crawl websites
 
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 
 

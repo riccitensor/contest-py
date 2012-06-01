@@ -3,7 +3,7 @@ Created on 10.01.2012
 
 RAW Clickstream data
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 
 A list of the message ids. This is something which is potentially not suited for cassandra at a large scale.
 Every time a message gets in it will be saved in raw format and the id will be pushed into this

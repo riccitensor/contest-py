@@ -1,7 +1,7 @@
 '''
 Created on 02.12.2011
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 import unittest
 import time

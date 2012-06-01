@@ -4,7 +4,7 @@ Created on 25.01.2012
 Columnfamily to store a list of all messages and their ids
 
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 from config import config_global
 from config import config_local

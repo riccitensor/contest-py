@@ -18,11 +18,14 @@ class rawJsonModel(baseModel):
 	
 	queued = False
 	
-	def __init__(self, json_string=None, mode='cassandra'):
+	def __init__(self, json_string=None, mode='cassandra', incomingTime = None):
 		super(rawJsonModel, self).__init__(mode)
 		
 		self.mode = mode
-		self.timestamp = getTimestamp.gettimeStampInMicroseconds()
+		if incomingTime == None:
+			self.timestamp = getTimestamp.gettimeStampInMicroseconds()
+		else:
+			self.timestamp = incomingTime
 		self.json_string = json_string
 		
 		if (mode == 'redis'):
@@ -83,7 +86,7 @@ class rawJsonModel(baseModel):
 			
 	def getN(self, N):
 		if (self.mode == 'redis'):
-			return self.redis_con.zrangebyscore(config_global.dbname_rawJson + ":zset", 0, float("infinity"), 0, N, withscores = True)
+			return self.redis_con.zrevrangebyscore(config_global.dbname_rawJson + ":zset", float("infinity"), 0, 0, N, withscores = False)
 			
 			
 		if (self.mode == 'cassandra'):
@@ -149,8 +152,8 @@ class rawJsonModel(baseModel):
 		self.redis_con.hset(config_global.dbname_rawJson + ":hash", timestamp, body)
 		
 		#self.redis_con.hse
-		#self.redis_con.zadd(config_global.dbname_rawJson + ":zset", body, timestamp)
-		return self.redis_con.zadd("blas", "blakeks", 1)
+		self.redis_con.zadd(config_global.dbname_rawJson + ":zset", body, timestamp)
+
 
 	
 		

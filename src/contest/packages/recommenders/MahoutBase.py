@@ -1,7 +1,7 @@
 '''
 Created on 14.02.2012
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 
 class Mahout_Base(object):

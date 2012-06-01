@@ -1,7 +1,7 @@
 '''
 Created on 04.11.2011
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 class scrapy_base(object):
     '''

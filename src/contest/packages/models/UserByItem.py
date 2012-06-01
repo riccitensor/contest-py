@@ -7,7 +7,7 @@ This going to be hard at aggregation level, because the request might be:
 
 give me all users for certain items in the last 12 hours in hour blocks
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 from contest.config import config_global
 from contest.config import config_local

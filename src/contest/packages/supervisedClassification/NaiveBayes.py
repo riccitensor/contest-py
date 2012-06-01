@@ -1,7 +1,7 @@
 '''
 Created on 18.10.2011
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 
 if __name__ == '__main__':

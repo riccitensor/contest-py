@@ -1,7 +1,7 @@
 '''
 Created on 04.12.2011
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 import unittest
 from contest.packages.statistics.histogramm import histogramm

@@ -1,7 +1,7 @@
 '''
 Created on 09.12.2011
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 
 this is just a testscript which writes custom GENERATED items as fast as possible into cassandra
 uses the itemmodel

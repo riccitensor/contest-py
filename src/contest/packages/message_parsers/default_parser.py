@@ -1,7 +1,7 @@
 '''
 Created on 16.11.2011
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 '''
 #from packages.recommenders import semantic_similarity
 

@@ -3,7 +3,7 @@ Created on 03.01.2012
 
 now we are testing querying data from our cassandra table
 
-@author: karisu
+@author: christian.winkelmann@plista.com
 @TODO: major refactoring needed since this is just a big conglomerate of various script snippets
 '''
 
