@@ -12,6 +12,8 @@ from datetime import date
 from contest.packages.models.HadoopSink import HadoopSink
 
 from contest.config import config_local
+from contest.config import config_global
+from contest.packages.writeback.SaveMessage import SaveMessage
 
 
 if __name__ == '__main__':
@@ -28,6 +30,9 @@ if __name__ == '__main__':
 	SAVE_ITEM_BY_USER = False
 	SAVE_HADOOP_SINK = True
 	SAVE_DIMENSION_LIST = True
+
+	backends = (config_global.SAVE_HADOOP_SINK)
+
 	hS = HadoopSink('/media/trekstor/test_dump') 
 	
 	cycle_count = 1000000 #number of items to fetch at once
@@ -71,21 +76,27 @@ if __name__ == '__main__':
 			itemid = int(result_item[1])
 			timestamp = str(result_item[2])
 			domainid = 	int(result_item[3])
+
+			id_list = {'userid' : userid, 'itemid' : itemid, 'timestamp' : timestamp, 'domainid' : domainid}
 				
 			current_time = time2.time()
 
-			if( SAVE_HADOOP_SINK ):
+			SaveMessage(id_list, async = False, api = 'id_list')
+
+
+			"""
+			if( config_global.SAVE_HADOOP_SINK in backends ):
 				rating = 1
-				
 				hS.save_mode2(userid, itemid, domainid, date)
-			
+			"""
+			"""
 			if (SAVE_DIMENSION_LIST):
 				dimension = 'user_ids'
 				dL = DimensionListModel( dimension )
 				if(debug):
 					print "userid:\t" + str(flattenedJson['client_id'])
 				dL.save( dimension_id = flattenedJson['client_id'], timestamp = timestamp_sec )
-	
+			"""
 			
 			
 			n += 1
