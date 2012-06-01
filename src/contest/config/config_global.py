@@ -44,3 +44,12 @@ dbnames_userLogList = [dbname_userLogByMicroSec,
 
 """ rabbitMQ configuration """
 config_rabbitmq_server = 'localhost'
+
+
+#BACKENDS
+SAVE_ITEM_BY_USER = 1
+SAVE_DIMENSION_LIST = 2
+SAVE_DISTRIBUTED_COUNTER = 3
+SAVE_HADOOP_SINK = 4
+
+
