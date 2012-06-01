@@ -5,6 +5,7 @@ central station for all incoming messages
 
 @author: christian.winkelmann@plista.com
 '''
+import pickle
 from contest.config import config_global
 from contest.packages.models.HadoopSink import HadoopSink
 from contest.packages.models.rawJsonModel import rawJsonModel
@@ -15,6 +16,10 @@ class SaveMessage(QueueBase):
 	''' dump messages into various formats '''
 	rawJson = None
 	fullyParsed = None
+
+	queue_name = 'SaveMessage'
+	routing_key = 'SaveMessage'
+	exchange_name = ''
 
 	def __init__(self):
 		'''
@@ -62,12 +67,35 @@ class SaveMessage(QueueBase):
 
 
 		else:
-			""" """
-			from contest.packages.queues.RawJsonDumpWorker import rawJsonDumpWorker
+			body_message = {'message' : message, 'api' : api, 'backends' : backends }
 
-			raw = rawJsonDumpWorker(mode='redis')
-			raw.enqueue(message)
+
+			body_message = pickle.dumps(body_message)
+
+			self.enqueue(body_message)
+			#from contest.packages.queues.RawJsonDumpWorker import rawJsonDumpWorker
+			#raw = rawJsonDumpWorker(mode='redis')
+			#raw.enqueue(message)
+
+
+	def callback(self, ch, method, properties, body):
+		""" """
+		print "working..."
+		body_message = pickle.loads(body)
+
+		message = body_message['message']
+		api = body_message['api']
+		backends = body_message['backends']
+		async = False
+		print message
+
+		self.save(message, async, api, backends)
 
 
 if __name__ == '__main__':
-	""" """
+
+	sM = SaveMessage()
+	sM.work()
+
+
+

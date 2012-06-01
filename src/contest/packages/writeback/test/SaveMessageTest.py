@@ -56,6 +56,20 @@ class SaveMessageTest(unittest.TestCase):
 
 			sM.save(id_list, async = False, api = 'id_list', backends=backends)
 
+	def test_SaveMessage_interpretedJson_async(self):
+		''' tests the generation of the writeBack of the interpreted data coming in from the contest messages
+		'''
+		backends = [config_global.SAVE_HADOOP_SINK, config_global.SAVE_RANDOM_RECOMMENDER]
+		userid = 5678
+		domainid = 8
+
+		sM = SaveMessage()
+		for itemid in xrange(5):
+			timestamp = getTimestamp.gettimeStampInMicroseconds()
+			id_list = {'userid' : userid, 'itemid' : itemid, 'timestamp' : timestamp, 'domainid' : domainid}
+
+			sM.save(id_list, async = True, api = 'id_list', backends=backends)
+
 
 
 	def test_SaveMessage_userStats(self):
