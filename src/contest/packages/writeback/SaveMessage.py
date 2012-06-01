@@ -9,12 +9,14 @@ from contest.packages.models.rawJsonModel import rawJsonModel
 from contest.packages.message_parsers.fullParser import FullContestMessageParser
 from contest.packages.recommenders.Random_Recommender import Random_Recommender
 from contest.packages.queues.QueueBase import QueueBase
+from contest.packages.statistics.userStats import UserStats
+
 class SaveMessage(QueueBase):
 	''' dump messages into various formats '''
 	rawJson = None
 	fullyParsed = None
 
-	def __init__(self, message, async=False, api = 'contest', backends = ()):
+	def __init__(self):
 		'''
 		  get the message, parse it and then save
 		  '''
@@ -23,7 +25,9 @@ class SaveMessage(QueueBase):
 
 
 	def save(self, message, async=False, api = 'contest', backends = ()):
+		"""
 
+		"""
 		if (not async):
 
 			if api == 'contest':
@@ -37,7 +41,7 @@ class SaveMessage(QueueBase):
 			if api == 'orp':
 				""" todo """
 
-			elif api == 'id_list': ## this for debuggin purposes
+			elif api == 'id_list': ## this for debugging purposes
 				userid = message['userid']
 				itemid = message['itemid']
 				timestamp = message['timestamp']
@@ -45,10 +49,10 @@ class SaveMessage(QueueBase):
 
 				additional_filter = {'domainid' : domainid}
 
-				fb = Random_Recommender( userid )
-				fb.set_recommendables(itemid, additional_filter)
+#				fb = Random_Recommender( userid )
+#				fb.set_recommendables(itemid, additional_filter)
 
-
+				us = UserStats(userid, itemid)
 
 
 

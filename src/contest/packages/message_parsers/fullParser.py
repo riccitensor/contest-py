@@ -27,9 +27,9 @@ class FullContestMessageParser(object):
 
 
 		if mode == 'redis':
-			self.save = self.save_redis()
+			self.save = self.save_redis
 		elif mode == 'cassandra':
-			self.save = self.save_cassandra()
+			self.save = self.save_cassandra
 
 
 	def parse(self, json_string):

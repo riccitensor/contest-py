@@ -31,7 +31,7 @@ if __name__ == '__main__':
 	SAVE_HADOOP_SINK = True
 	SAVE_DIMENSION_LIST = True
 
-	backends = (config_global.SAVE_HADOOP_SINK)
+	backends = (config_global.SAVE_HADOOP_SINK, config_global.SAVE_ITEM_BY_USER)
 
 	hS = HadoopSink('/media/trekstor/test_dump') 
 	
@@ -77,12 +77,15 @@ if __name__ == '__main__':
 			timestamp = str(result_item[2])
 			domainid = 	int(result_item[3])
 
-			id_list = {'userid' : userid, 'itemid' : itemid, 'timestamp' : timestamp, 'domainid' : domainid}
+			id_list = {'userid' : userid,
+					   'itemid' : itemid,
+					   'timestamp' : timestamp,
+					   'domainid' : domainid}
 				
 			current_time = time2.time()
 
-			SaveMessage(id_list, async = False, api = 'id_list')
-
+			sM = SaveMessage()
+			sM.save( id_list, async = False, api = 'id_list', backends = (config_global.SAVE_USER_STATS) )
 
 			"""
 			if( config_global.SAVE_HADOOP_SINK in backends ):

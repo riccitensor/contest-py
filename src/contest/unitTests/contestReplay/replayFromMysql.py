@@ -173,7 +173,7 @@ if __name__ == '__main__':
 
 				if (SAVE_DIMENSION_LIST):
 					dimension = 'user_ids'
-					dL = DimensionListModel( dimension )
+					dL = DimensionListModel( dimension, mode = 'redis' )
 					if(debug):
 						print "userid:\t" + str(flattenedJson['client_id'])
 					dL.save( dimension_id = flattenedJson['client_id'], timestamp = timestamp_sec )

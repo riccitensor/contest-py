@@ -21,7 +21,7 @@ class histogramm(object):
         diff = self.maxx - self.minx
         self.binsize = float(diff) / float(self.binnum)
         for i in xrange(self.binnum): self.histogram[i] = 0
-        print "bla"
+
         for l in list:
             binindex = math.floor( (l / self.binsize))
             self.histogram[binindex] += 1
