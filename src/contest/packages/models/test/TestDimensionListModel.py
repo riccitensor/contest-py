@@ -4,16 +4,15 @@ Created on 31.01.2012
 @author: christian.winkelmann@plista.com
 '''
 import unittest
+import cql
+from random import uniform
+
 from contest.config import config_global
 from contest.config import config_local
-import cql
-from cql.cassandra import Cassandra
-from contest.packages.helper.getTimestamp import getTimestamp
-import time
 from contest.packages.models.DimensionListModel import DimensionListModel
 from contest.migrations.setup_keyspaces import Setup_Keyspaces
 from contest.migrations._007_dimensionLists import dimensionListsMigration
-from random import uniform
+
 
 
 class TestDimensionListModel(unittest.TestCase):
@@ -33,66 +32,8 @@ class TestDimensionListModel(unittest.TestCase):
 
         self.cursor.execute("USE " + config_global.cassandra_default_keyspace)
 
-        #config_global.dbname_dimensionList_rowKeys[0]
-        #dL = DimensionListModel(config_global.dbname_dimensionList_rowKeys[0])
 
         print "setting up database done"
-
-
-    def tearDown(self):
-        pass
-
-
-    def testSaveDimensionListBySeconds(self):
-        """ test if the stream of information is written as wished
-        """
-        dimension = 'user_ids'
-        self.dL = DimensionListModel(dimension, 'cassandra')
-
-        timestamp = 4000 # this equals hour 2
-        for i in xrange(5):
-            curr_timestamp = timestamp + i
-            #r = int(uniform(0,1000))
-            r = 2
-            for user_id in xrange(r):
-                self.dL.save(user_id, curr_timestamp)
-
-            print i
-        print timestamp
-        mylist = self.dL.getByTime(timestamp)
-
-        print "mylist: "
-        print mylist
-        self.assertEqual(mylist[dimension], u'user_ids_by_seconds_4000', "the entries are not equal")
-        self.assertEqual(mylist[0], 0, "the entries are not equal")
-        self.assertEqual(len(mylist), 3, "the list has the wrong length")
-
-
-    def testSaveDimensionListByMinutes(self):
-        """ test if the we can save impressions by minute
-        """
-        dimension = 'user_ids'
-        self.dL = DimensionListModel(dimension, 'cassandra')
-
-        timestamp = 0 # this equals hour 2
-        for i in xrange(5):
-            curr_timestamp = timestamp + i
-            #r = int(uniform(0,1000))
-            r = 2
-            for user_id in xrange(r):
-                self.dL.save(user_id, curr_timestamp, 'minutes')
-
-            print i
-        print timestamp
-        mylist = self.dL.getByTime(timestamp)
-
-        print mylist
-
-        self.assertEqual(mylist['dimension_name'], u'user_ids_by_seconds_4000', "the entries are not equal")
-        self.assertEqual(mylist[0], 0, "the entries are not equal")
-        self.assertEqual(len(mylist), 3, "the list has the wrong length")
-
-        #dL.save_bin(1, 'hours', binId)
 
 
 
@@ -102,9 +43,6 @@ class TestDimensionListModel(unittest.TestCase):
             curr_timestamp = timestamp_start + i
             for user_id in xrange(id_range):
                 self.dL.save(user_id, curr_timestamp)
-
-
-
 
 
 
@@ -139,16 +77,10 @@ class TestDimensionListModel(unittest.TestCase):
         dimension = 'user_ids'
         self.dL = DimensionListModel(dimension, 'cassandra')
 
-
-        #self.save_test_data(timestamp_start, time_stamp_range, id_range)
         self.dL.save(dimension_id=1, timestamp=59)
         self.dL.save(dimension_id=2, timestamp=59)
         self.dL.save(dimension_id=3, timestamp=59)
         self.dL.save(dimension_id=1, timestamp=61)
-
-        #self.dL.save(dimension_id=1, timestamp=3000)
-        #self.dL.save(dimension_id=2, timestamp=3000)
-        #self.dL.save(dimension_id=3, timestamp=3000)
         self.dL.save(dimension_id=4, timestamp=3000)
 
         id_stats = self.dL.getByTime(0, 1, binSize='minutes')
@@ -163,6 +95,17 @@ class TestDimensionListModel(unittest.TestCase):
         self.assertEquals(3, len(id_stats[u'user_ids_by_minutes_0']), "wrong length")
 
 
+    def testGetDimensionListRangeByHours(self):
+        """ test if the stream of information is written as wished
+        """
+        dimension = 'user_ids'
+        self.dL = DimensionListModel(dimension, 'cassandra')
+
+        self.dL.save(dimension_id=1, timestamp=59)
+        self.dL.save(dimension_id=2, timestamp=59)
+        self.dL.save(dimension_id=3, timestamp=59)
+        self.dL.save(dimension_id=1, timestamp=61)
+        self.dL.save(dimension_id=4, timestamp=3000)
 
 
         #### hours ####
@@ -180,6 +123,23 @@ class TestDimensionListModel(unittest.TestCase):
         self.assertEquals(2, len(id_stats[u'user_ids_by_hours_1']), "wrong length")
 
 
+    def testGetDimensionListRangeByDay(self):
+        """ test if the stream of information is written as wished
+        """
+        dimension = 'user_ids'
+        self.dL = DimensionListModel(dimension, 'cassandra')
+
+
+        #self.save_test_data(timestamp_start, time_stamp_range, id_range)
+        self.dL.save(dimension_id=1, timestamp=59)
+        self.dL.save(dimension_id=2, timestamp=59)
+        self.dL.save(dimension_id=3, timestamp=59)
+        self.dL.save(dimension_id=1, timestamp=61)
+
+        #self.dL.save(dimension_id=1, timestamp=3000)
+        #self.dL.save(dimension_id=2, timestamp=3000)
+        #self.dL.save(dimension_id=3, timestamp=3000)
+        self.dL.save(dimension_id=4, timestamp=3000)
 
 
         ####### days
@@ -209,6 +169,8 @@ class TestDimensionListModel(unittest.TestCase):
         #self.assertEquals(id_range, len(id_stats[u'user_ids_by_days_1']), "wrong length")
 
 
+
+
     def testSetComputedIds(self):
         dimension = 'user_ids'
         dL = DimensionListModel(dimension, mode = 'cassandra')
@@ -236,13 +198,15 @@ class TestDimensionListModel(unittest.TestCase):
 
 
 
-    def testBinify(self):
+    def test_Binify_Minutes(self):
         """ this function has a stupid name, but will get data from one dimensionList an will aggregate it
         """
         self.dL = DimensionListModel('user_ids', mode='cassandra')
-        timestamp = 1
+        binSize = 'minutes'
 
-        for i in xrange(58, 61):
+        start_seconds = 58
+        end_seconds = 61
+        for i in xrange(start_seconds, end_seconds):
             for user_id in xrange(int(uniform(1, 6))):
                 curr_timestamp = i
                 self.dL.save(user_id, curr_timestamp)
@@ -252,10 +216,118 @@ class TestDimensionListModel(unittest.TestCase):
 
         #print list
         """ save the data """
-        binified = self.dL.binify('minutes', 0, 1)
+        binified = self.dL.binify(binSize, 0, 1)
         print binified
-        binified = self.dL.binify('minutes', 1, 2)
+        self.assertIn(u'user_ids_by_seconds_58', binified)
+        self.assertIn(u'user_ids_by_seconds_59', binified)
+        self.assertNotIn(u'user_ids_by_seconds_60', binified)
+
+        binified = self.dL.binify(binSize, 1, 2)
+        self.assertNotIn(u'user_ids_by_seconds_58', binified)
+        self.assertNotIn(u'user_ids_by_seconds_59', binified)
+        self.assertIn(u'user_ids_by_seconds_60', binified)
         print binified
+
+    def test_Binify_Hours(self):
+        """ this function has a stupid name, but will get data from one dimensionList an will aggregate it
+        """
+        self.dL = DimensionListModel('user_ids', mode='cassandra')
+        binSize = 'hours'
+
+        start_seconds = 58
+        end_seconds = 61
+        for i in xrange(start_seconds, end_seconds):
+            for user_id in xrange(int(uniform(1, 6))):
+                curr_timestamp = i
+                self.dL.save(user_id, curr_timestamp)
+
+        start_seconds = 3600
+        end_seconds = start_seconds + 1
+        for i in xrange(start_seconds, end_seconds):
+            for user_id in xrange(int(uniform(1, 6))):
+                curr_timestamp = i
+                self.dL.save(user_id, curr_timestamp)
+
+
+        binified = self.dL.binify(binSize, 1, 2)
+        self.assertIn(u'user_ids_by_seconds_3600', binified)
+
+
+        binified = self.dL.binify(binSize, 0, 1)
+        print binified
+        self.assertIn(u'user_ids_by_seconds_58', binified)
+        self.assertIn(u'user_ids_by_seconds_59', binified)
+        self.assertIn(u'user_ids_by_seconds_60', binified)
+        self.assertNotIn(u'user_ids_by_seconds_3600', binified)
+
+
+
+    def test_Binify_Days(self):
+        """ this function has a stupid name, but will get data from one dimensionList an will aggregate it
+        """
+        self.dL = DimensionListModel('user_ids', mode='cassandra')
+        binSize = 'days'
+
+        start_seconds = 58
+        end_seconds = 61
+        for i in xrange(start_seconds, end_seconds):
+            for user_id in xrange(int(uniform(1, 6))):
+                curr_timestamp = i
+                self.dL.save(user_id, curr_timestamp)
+
+        start_seconds = 86400
+        end_seconds = start_seconds + 1
+        for i in xrange(start_seconds, end_seconds):
+            for user_id in xrange(int(uniform(1, 6))):
+                curr_timestamp = i
+                self.dL.save(user_id, curr_timestamp)
+
+        """ save the data """
+        binified = self.dL.binify(binSize, 0, 1)
+        print binified
+        self.assertIn(u'user_ids_by_seconds_58', binified)
+        self.assertIn(u'user_ids_by_seconds_59', binified)
+        self.assertIn(u'user_ids_by_seconds_60', binified)
+        self.assertNotIn(u'user_ids_by_seconds_86400', binified)
+
+        binified = self.dL.binify(binSize, 1, 2)
+        self.assertIn(u'user_ids_by_seconds_86400', binified)
+
+
+        binified = self.dL.binify(binSize, 0, 2)
+        print binified
+        self.assertIn(u'user_ids_by_seconds_58', binified)
+        self.assertIn(u'user_ids_by_seconds_59', binified)
+        self.assertIn(u'user_ids_by_seconds_60', binified)
+        self.assertIn(u'user_ids_by_seconds_86400', binified)
+
+
+    def _test_Binify_Performance(self):
+        """ this function has a stupid name, but will get data from one dimensionList an will aggregate it
+        """
+        self.dL = DimensionListModel('user_ids', mode='cassandra')
+        binSize = 'days'
+
+        start_seconds = 58
+        end_seconds = 90000
+        for i in xrange(start_seconds, end_seconds):
+            for user_id in xrange(int(uniform(1, 6))):
+                curr_timestamp = i
+                self.dL.save(user_id, curr_timestamp)
+
+
+        """ save the data """
+        binified = self.dL.binify(binSize, 0, 1)
+        print binified
+        self.assertIn(u'user_ids_by_seconds_58', binified)
+        self.assertIn(u'user_ids_by_seconds_59', binified)
+        self.assertIn(u'user_ids_by_seconds_60', binified)
+        self.assertNotIn(u'user_ids_by_seconds_86400', binified)
+
+        binified = self.dL.binify(binSize, 1, 2)
+        self.assertIn(u'user_ids_by_seconds_86400', binified)
+
+
 
 
 if __name__ == "__main__":
