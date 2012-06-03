@@ -52,7 +52,8 @@ class SaveMessage(QueueBase):
 #				fb = Random_Recommender( userid )
 #				fb.set_recommendables(itemid, additional_filter)
 
-				us = UserStats(userid, itemid)
+				us = UserStats('userid', 'itemid')
+				us.save(userid,itemid)
 
 
 
