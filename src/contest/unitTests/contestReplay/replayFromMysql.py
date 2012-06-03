@@ -7,6 +7,7 @@ this is an integration test, which will benchmark the whole system reagarding th
 @author: christian.winkelmann@plista.com
 
 '''
+from contest.config import config_local
 
 from contest.packages.helper.getTimestamp import getTimestamp
 from contest.packages.models.rawJsonModel import rawJsonModel
@@ -37,7 +38,7 @@ if __name__ == '__main__':
 	
 	
 	db=_mysql.connect(host="localhost",user="root",
-				  passwd="kar--32!",db="contest")
+				  passwd=config_local.mysql_password,db="contest")
 	
 	SAVE_ITEM_BY_USER = False
 	SAVE_DIMENSION_LIST = False

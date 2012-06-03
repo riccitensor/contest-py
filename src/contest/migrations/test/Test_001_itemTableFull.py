@@ -9,8 +9,8 @@ the database
 '''
 
 import unittest
-from config import config_local
-from config import config_global
+from contest.config import config_local
+from contest.config import config_global
 import cql
 
 

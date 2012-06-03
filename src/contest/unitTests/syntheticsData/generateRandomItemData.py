@@ -16,7 +16,6 @@ writing 100.000.000 items which 20 properties each and non sparse
 
 '''
 
-print "bla"
 import sys
 # print sys.path
 # sys.path.append("/home/karisu/python_env/lib/python2.7/site-packages/contest/Transport/contest")
