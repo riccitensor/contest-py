@@ -10,6 +10,10 @@ import redis
 from contest.packages.designPatterns import Singleton
 from contest.config.cassandraConnection import CassandraConnection
 
+class RedisConnection(object):
+	pass
+
+
 class baseModel(object):
     '''
     base Model connection
@@ -24,7 +28,8 @@ class baseModel(object):
             self.conn = CassandraConnection()
         else:
             if ( mode == 'redis' ):
-                self.conn = self.conn = redis.Redis("localhost")
+                #self.conn = redis.Redis("localhost")
+				self.conn = RedisConnection() #redis.Redis("localhost")
         
     def save(self):
         """ to overload this function """

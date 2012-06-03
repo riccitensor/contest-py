@@ -1,12 +1,12 @@
 '''
 Created on 21.01.2012
 
-Columnfamily to store all points in dimensions which like items, users, messages, browser, days, hours this will serve 
+Model to store all points in dimensions like items, users, messages, browser, days, hours this will serve
 as an index
 
 instead of just saving just the global list of dimension items it will save kind of histograms in blocks of
 time
-This obsoletes "userByTime"
+This obsoletes "userByTime" but not yet "ItemByUser"
 
 
 There are loads of types here: stream By Milliseconds hours, days, months, years, allTime 
@@ -19,7 +19,6 @@ To make the computation of the bins fast we are using a continous query pattern
 from contest.config import config_global
 from contest.config import config_local
 import cql
-from cql.cassandra import Cassandra
 from baseModel import baseModel
 from contest.packages.helper.getTimestamp import getTimestamp
 import time
@@ -121,7 +120,7 @@ class DimensionListModel(baseModel):
              
         self.setComputedIds(self.dimensionName, fromTime, toTime, target)
 
-        return list
+        return True
         
         
     def getByTime(self, timestampStart, timestampEnd = None, binSize = 'seconds', renew = False):
@@ -222,6 +221,8 @@ class DimensionListModel(baseModel):
             
         key = self.dimensionName + "_by_" + binSize + "_done"
         timerange = getTimestamp.convertTimeStampsPairToRange(rangeStart, rangeEnd, binSize, binSize )
+
+        """ TODO make one query out of this """
         for dimension_id in timerange:
             cql_query = """UPDATE :table SET :dimension_id = :dimension_id WHERE dimension_name = :dimension_name """
             self.conn.cursor.execute(cql_query, 
