@@ -8,6 +8,7 @@ import redis
 from contest.packages.message_parsers.default_parser import default_parser
 import json
 
+# TODO Fix this unitTest
 class default_parser_test(unittest.TestCase):
     
     

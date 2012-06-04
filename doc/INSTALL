@@ -9,7 +9,13 @@ The webserver is Flask. See http://flask.pocoo.org/ for details. The minimal eff
 add new sources to /etc/apt/sources.list
 
 #### TODO split components
-$ sudo apt-get install python-dev python-pip python-virtualenv redis-server sqlite3 byobu dsc dsc-demos opscenter-free 
+$ sudo apt-get install python-dev python-pip python-virtualenv redis-server sqlite3 byobu python-nose gfortran python-dev libatlas3gf-base libblas-dev libatlas-base-dev liblapack3gf gfortran gfortran-multilib g++  libatlas3gf-base python-matplotlib
+
+install Cassandra dependencies
+First install Cassandra itself
+http://www.datastax.com/docs/1.1/install/install_package#installing-cassandra-debian-packages
+
+$ sudo apt-get install dsc dsc-demos opscenter-free
 
 
 now goto the folder where the python code should be located later/already is. It should be a safe and nice location, since the webserver is integrated nothing more will be needed so far.
@@ -57,13 +63,10 @@ remember to be in your virtual environment because later we need to upgrade nump
 
 cd clickabilly_gensim
 $ . env/bin/activate
-$ sudo apt-get install python-nose gfortran python-dev libatlas3gf-base libblas-dev libatlas-base-dev liblapack3gf gfortran gfortran-multilib g++  libatlas3gf-base
-$ sudo pip install numpy 
+$ sudo pip install numpy
 $ python -Wd -c 'import numpy; numpy.test()'
 $ python -Wd -c 'import scipy ; scipy.test() '
 $ sudo pip install scipy
-$ sudo easy_install sqlitedict
-$ sudo easy_install Pyro4
 
 $ sudo pip install --upgrade gensim
 

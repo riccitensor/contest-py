@@ -18,7 +18,7 @@ import random
 
 if __name__ == '__main__':
 	'''start the server on command line
-	$ sudo bin/cassandra -f '''
+	sudo bin/cassandra -f '''
 	''' connect to the server '''
 
 

@@ -12,6 +12,8 @@ from contest.packages.models.rawJsonModel import rawJsonModel
 from contest.packages.message_parsers.fullParser import FullContestMessageParser
 from contest.packages.recommenders.Random_Recommender import Random_Recommender
 from contest.packages.queues.QueueBase import QueueBase
+from contest.packages.statistics.userStats import UserStats
+
 class SaveMessage(QueueBase):
 	''' dump messages into various formats '''
 	rawJson = None
@@ -46,7 +48,7 @@ class SaveMessage(QueueBase):
 			if api == 'orp':
 				""" todo """
 
-			elif api == 'id_list': ## this for debuggin purposes
+			elif api == 'id_list': ## this for debugging purposes
 				userid = message['userid']
 				itemid = message['itemid']
 				timestamp = message['timestamp']
@@ -62,7 +64,8 @@ class SaveMessage(QueueBase):
 					rating = 1
 					hS.save_mode2(userid, itemid, domainid, timestamp)
 
-
+				us = UserStats('userid', 'itemid')
+				us.save(userid,itemid)
 
 
 

@@ -4,8 +4,14 @@ Created on 04.12.2011
 @author: christian.winkelmann@plista.com
 '''
 import unittest
+from contest.config import config_local
 from contest.packages.statistics.histogramm import histogramm
 import random
+
+import sys
+import os
+#sys.path.append(config_local.)
+
 
 class histogrammTest(unittest.TestCase):
 
@@ -42,5 +48,11 @@ class histogrammTest(unittest.TestCase):
         print catHistogram
 
 if __name__ == "__main__":
+    print "location"
+    #print LOCATE #
+    print os.getcwd()+ '/' #
+
+    print sys.argv[0] #
+
     #import sys;sys.argv = ['', 'Test.testName']
-    unittest.main()
+   # unittest.main()

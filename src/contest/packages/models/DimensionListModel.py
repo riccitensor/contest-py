@@ -1,12 +1,12 @@
 '''
 Created on 21.01.2012
 
-Columnfamily to store all points in dimensions which like items, users, messages, browser, days, hours this will serve 
+Model to store all points in dimensions like items, users, messages, browser, days, hours this will serve
 as an index
 
 instead of just saving just the global list of dimension items it will save kind of histograms in blocks of
 time
-This obsoletes "userByTime"
+This obsoletes "userByTime" but not yet "ItemByUser"
 
 
 There are loads of types here: stream By Milliseconds hours, days, months, years, allTime 
@@ -19,7 +19,6 @@ To make the computation of the bins fast we are using a continous query pattern
 from contest.config import config_global
 from contest.config import config_local
 import cql
-from cql.cassandra import Cassandra
 from baseModel import baseModel
 from contest.packages.helper.getTimestamp import getTimestamp
 import time
@@ -57,11 +56,9 @@ class DimensionListModel(baseModel):
         """ add ids to the columnfamily """
         
         self.conn.cursor.execute("USE " + config_global.cassandra_default_keyspace)
-        #key = self.default_key + "_" + str(timestamp)
+
         key = self.dimensionName + "_by_" + binSize + "_" + str(timestamp) 
-        if ( binSize == 'minutes'):
-            print ""
-        
+
         try:        
                 self.conn.cursor.execute("""INSERT INTO :table ( dimension_name, :dimension_id ) VALUES 
                         ( :dimension_name, 0)""", 
@@ -76,38 +73,35 @@ class DimensionListModel(baseModel):
             print programmingError
     
 
-            
-    #self.dL.binify('minutes', 0, 1)
+
     def binify(self, target, fromTime, toTime = None, origin = 'seconds'  ):
         """ push the data into bin according the binsize 
             @param: binsize like minutes or hours
             @param: fromTime starting Point
             @param: toTime endPoint
         """
-        
-        
+
+
         
         """ get the whole range at once """
         """ @todo: these following function should be dependent from the origin """
         if ( target == 'minutes'):
             fromTime_origin = getTimestamp.getTimeStampFromMinutes(fromTime)
             toTime_origin = getTimestamp.getTimeStampFromMinutes(toTime)
-            idlist = self.getByTime( fromTime_origin, toTime_origin, 'seconds')
-        
-        if ( target == 'hours'):
+
+        elif ( target == 'hours'):
             fromTime_origin = getTimestamp.getTimeStampFromHours(fromTime)
             toTime_origin = getTimestamp.getTimeStampFromHours(toTime)
-            idlist = self.getByTime( fromTime_origin, toTime_origin, 'seconds')
-            
-        if ( target == 'days'):
+
+        elif ( target == 'days'):
             fromTime_origin = getTimestamp.getTimeStampFromDays(fromTime)
             toTime_origin = getTimestamp.getTimeStampFromDays(toTime)
-            idlist = self.getByTime( fromTime_origin, toTime_origin, 'seconds')
-            
-        if ( target == 'weeks'):
+
+        elif ( target == 'weeks'):
             fromTime_origin = getTimestamp.getTimeStampFromWeeks(fromTime)
             toTime_origin = getTimestamp.getTimeStampFromWeeks(toTime)
-            idlist = self.getByTime( fromTime_origin, toTime_origin, 'seconds')
+
+        idlist = self.getByTime( fromTime_origin, toTime_origin, 'seconds')
 
         """ now we have a list of all """
         target_list = Set([])
@@ -121,7 +115,7 @@ class DimensionListModel(baseModel):
              
         self.setComputedIds(self.dimensionName, fromTime, toTime, target)
 
-        return list
+        return idlist
         
         
     def getByTime(self, timestampStart, timestampEnd = None, binSize = 'seconds', renew = False):
@@ -222,6 +216,8 @@ class DimensionListModel(baseModel):
             
         key = self.dimensionName + "_by_" + binSize + "_done"
         timerange = getTimestamp.convertTimeStampsPairToRange(rangeStart, rangeEnd, binSize, binSize )
+
+        """ TODO make one query out of this """
         for dimension_id in timerange:
             cql_query = """UPDATE :table SET :dimension_id = :dimension_id WHERE dimension_name = :dimension_name """
             self.conn.cursor.execute(cql_query, 

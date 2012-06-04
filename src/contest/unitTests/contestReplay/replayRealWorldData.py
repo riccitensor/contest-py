@@ -13,6 +13,8 @@ from contest.packages.models.HadoopSink import HadoopSink
 
 from contest.config import config_local
 from contest.config import config_global
+from contest.packages.statistics.histogramm_graph import Plot_Helper
+from contest.packages.statistics.userStats import UserStats
 from contest.packages.writeback.SaveMessage import SaveMessage
 
 
@@ -31,9 +33,9 @@ if __name__ == '__main__':
 	SAVE_HADOOP_SINK = True
 	SAVE_DIMENSION_LIST = True
 
-	backends = (config_global.SAVE_HADOOP_SINK)
+	backends = (config_global.SAVE_HADOOP_SINK, config_global.SAVE_ITEM_BY_USER)
 
-	hS = HadoopSink('/media/trekstor/test_dump') 
+	hS = HadoopSink()
 	
 	cycle_count = 1000000 #number of items to fetch at once
 	n_maxrows = 100000
@@ -49,11 +51,11 @@ if __name__ == '__main__':
 	
 		if not IMPLICIT:
 			sql = """SELECT userid, itemid, src, date as timestamp FROM db_youfilter.clickfeedback c \
-			WHERE 1"""
+			WHERE 1 LIMIT 1000"""
 		
 		else :
 			sql = """SELECT userid, itemid, date, domainid as timestamp FROM db_archive.implicitratings c \
-			WHERE 1"""
+			WHERE 1 LIMIT 1000"""
 			
 		db.query(sql)
 		r=db.use_result()
@@ -77,12 +79,15 @@ if __name__ == '__main__':
 			timestamp = str(result_item[2])
 			domainid = 	int(result_item[3])
 
-			id_list = {'userid' : userid, 'itemid' : itemid, 'timestamp' : timestamp, 'domainid' : domainid}
+			id_list = {'userid' : userid,
+					   'itemid' : itemid,
+					   'timestamp' : timestamp,
+					   'domainid' : domainid}
 				
 			current_time = time2.time()
 
-			SaveMessage(id_list, async = False, api = 'id_list')
-
+			sM = SaveMessage()
+			sM.save( id_list, async = False, api = 'id_list', backends = (config_global.SAVE_USER_STATS) )
 
 			"""
 			if (SAVE_DIMENSION_LIST):
@@ -108,5 +113,11 @@ if __name__ == '__main__':
 	
 	print "time it took: " + str(replay_time)
 	print 'It took {0:1f} seconds per item'.format(replay_time/n)
-	
+
+	us = UserStats('userid', 'itemid')
+
+	the_list = us.get_Top_N('userid', 100)
+	print the_list
+	pH = Plot_Helper()
+	pH.make_plot(the_list)
 	
