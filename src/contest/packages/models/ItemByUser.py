@@ -11,11 +11,8 @@ This will be used for user based collaborative filtering
 from contest.config import config_global
 from contest.config import config_local
 import cql
-from cql.cassandra import Cassandra
 from baseModel import baseModel
-from contest.packages.helper.getTimestamp import getTimestamp
-import time
-from sets import Set
+
 
 class ItemsByUser(baseModel):
     

@@ -9,9 +9,7 @@ import cql
 import redis
 from contest.packages.designPatterns import Singleton
 from contest.config.cassandraConnection import CassandraConnection
-
-class RedisConnection(object):
-	pass
+from contest.config.cassandraConnection import RedisConnection
 
 
 class baseModel(object):

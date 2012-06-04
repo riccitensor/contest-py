@@ -68,9 +68,10 @@ class SaveMessage(QueueBase):
 				us.save(userid,itemid)
 
 
-
 		else:
-			body_message = {'message' : message, 'api' : api, 'backends' : backends }
+			body_message = {'message' : message,
+							'api' : api,
+							'backends' : backends }
 
 
 			body_message = pickle.dumps(body_message)

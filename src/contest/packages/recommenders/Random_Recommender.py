@@ -36,15 +36,18 @@ class Random_Recommender(baseRecommender):
 
 		return key
 		
-	def get_recommendation(self, userid, constraints, N, remove = False):
+	def get_recommendation(self, userid, constraints, N, remove = False, ranked = False):
 		""" fetch a random recommendation 
 		@param N number of recommendations
 		@param itemids which should be ignored
 		"""
 		key = self.compute_key(constraints, userid)
-		resultSet = self.redis_con.zrange(key, 0, N-1)
-		# todo remove the items from the resultest
-		if (remove): self.invalidate_recommended_items(key, resultSet)
+		if not ranked:
+			resultSet = self.redis_con.zrevrange(key, 0, N-1)
+		elif ranked:
+			resultSet = self.redis_con.zrevrange(key, 0, N-1, withscores=True)
+
+		if remove: self.invalidate_recommended_items(key, resultSet)
 			
 		return resultSet
 
@@ -57,11 +60,11 @@ class Random_Recommender(baseRecommender):
 		# @todo get the items the user has seen already seen, or other excluding factors
 		
 		# @todo compute the list of recommendations
-		self.userid
+		#self.userid
 		
-		recList = RecommendationList(self.key, mode='redis')
-		recList = recList.get()
-		return recList
+		#recList = RecommendationList(self.key, mode='redis')
+		#recList = recList.get()
+		#return recList
 		
 		
 	def train(self, userid, addition_filter, N = 10 ):
@@ -75,7 +78,7 @@ class Random_Recommender(baseRecommender):
 		if (self.get_amount_of_recommendables(recommendable_key) >=  N): #we have more items then we have to ignore + we need
 			while (i < N):
 
-				recommendable_item = self.get_recommendable_item(recommendable_key)
+				recommendable_item = self.get_recommendable_item(key = recommendable_key)
 
 				if (recommendable_item in recList):
 					pass
@@ -143,16 +146,18 @@ class Random_Recommender(baseRecommender):
 
 
 		
-	def set_recommendables(self, itemid, additional_filter = {}):
+	def set_recommendables(self, itemid, additional_filter = {}, key = None):
 		""" set a recommendable item, globally and with the given constraints """
 		logging.debug('fallback_random: saving a recommendable item' + str(itemid))
-		''' FIXME the filters need to be orthographically sorted '''
-
-		key = self.compute_key(additional_filter)
-
+		#TODO the filters need to be orthographically sorted
+		if key is None:
+			key = self.compute_key(additional_filter)
 		self.redis_con.sadd(key, itemid)
 
-	def get_recommendable_item(self, key):
+	def get_recommendable_item(self, additional_filter = None, key = None):
+		if key is None:
+			key = self.compute_key(additional_filter)
+
 		recommendable_item = self.redis_con.srandmember(key)
 		return recommendable_item
 
@@ -171,7 +176,10 @@ class Random_Recommender(baseRecommender):
 		''' already recommendet items should be shown again so soon
 		'''
 		for item in recommendet_item_list:
-			self.redis_con.zrem(key, item)
+			if type(item) == type(()):
+				self.redis_con.zrem(key, item[0])
+			else:
+				self.redis_con.zrem(key, item)
 	
 if __name__ == '__main__':
 	'''

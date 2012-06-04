@@ -1,0 +1,6 @@
+
+To run the scripts or the Request Handler Server you need to add the packages to the PYTHONPATH
+
+PYTHONPATH=$PYTHONPATH:/home/cw/PycharmProjects/contest/contest/src
+
+python -m unittest discover -p 'Test*.py'

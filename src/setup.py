@@ -48,5 +48,5 @@ setup(name='contest',
                 'contest.unitTests.test.gensim',
                 'contest.unitTests.riak_games',
                 'contest.unitTests.test.testImport',                
-                 ], requires=['redis'],
+                 ], requires=['redis', 'cql'],
      )

@@ -4,11 +4,10 @@ Created on 05.02.2012
 @author: christian.winkelmann@plista.com
 '''
 import unittest
-from packages.models.ItemByUser import ItemsByUser
+from contest.packages.models.ItemByUser import ItemsByUser
 from migrations.setup_keyspaces import Setup_Keyspaces
-from config import config_global
-import migrations
-from migrations._004_itemsByUserId import ItemByUserId
+from contest.config import config_global
+from contest.migrations._004_itemsByUserId import ItemByUserId
 
 class TestItemByUser(unittest.TestCase):
 

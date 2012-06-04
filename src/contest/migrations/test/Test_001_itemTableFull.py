@@ -50,9 +50,8 @@ class itemTableFullTest(unittest.TestCase):
     
         
         try:
-            self.cursor.execute(""" SELECT * FROM :columnfamily """, 
-           
-                           dict(columnfamily = config_global.dbname_itemModel))
+            self.cursor.execute(""" SELECT * FROM :columnfamily """,
+				dict(columnfamily = config_global.dbname_itemModel))
             
             
             print " queried from ItemTableFull "

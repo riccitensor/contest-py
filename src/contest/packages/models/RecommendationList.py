@@ -30,14 +30,14 @@ class RecommendationList(baseModel):
 		super(RecommendationList, self).__init__(mode)
 		self.mode = mode
 		
-		if (self.mode == 'cassandra'):
+		if self.mode == 'cassandra':
 			self.get = self.get_cassandra 
 			self.save = self.save_cassandra
 		
-		elif(self.mode == 'redis'):
+		elif self.mode == 'redis':
 			self.get = self.get_redis
 			self.save = self.save_redis
-		elif(self.mode == 'hybrid'):
+		elif self.mode == 'hybrid':
 			''' @todo: uses both or more storages '''
 				
 		 
@@ -80,10 +80,11 @@ class RecommendationList(baseModel):
 		if (type(sortedSet) == type(())) or (type(sortedSet) == type([])):
 			for item in sortedSet:
 				self.conn.zadd(key, item[0], item[1])
-		elif (type(sortedSet) == type({})):		 
+		elif type(sortedSet) == type({}) :
 			for value, score in sortedSet.items():
+				print ""
 				self.conn.zadd(key, value, score)
-		
+
 	
 
 	def get_cassandra(self, key, N, remove=False):
@@ -107,7 +108,7 @@ class RecommendationList(baseModel):
 		'''dict[ r[0] ] = []
 		for i in xrange(1, len(r)):
 				self.dict[ r[0] ].append( d[i][0] )
-'''
+		'''
 			
 		# return self.dict
 		# print r

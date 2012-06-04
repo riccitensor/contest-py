@@ -7,6 +7,7 @@ Singleton3 is in production use
 
 @contact: karisu@gmail.com
 """
+import redis
 
 from contest.config import config_global
 from contest.config import config_local
@@ -91,6 +92,20 @@ class Singleton3(object):
             # Above is particularly useful when inheritance occurs
             # cls._inst = object.__new__(cls, *args, **kwargs)
         return cls._inst
+
+
+class Singleton_Redis(object):
+	""" A Pythonic Singleton
+Inheritance from "object" is new feature. Function "super"
+can only be used with instance inherited from "object".
+"""
+	def __new__(cls, *args, **kwargs):
+		if '_inst' not in vars(cls):
+		#            print "Instance initialization ..."
+			cls._inst = super(Singleton_Redis, cls).__new__(cls, *args, **kwargs)
+
+			cls._inst = redis.Redis("localhost")
+		return cls._inst
 
 
 if __name__ == "__main__":
