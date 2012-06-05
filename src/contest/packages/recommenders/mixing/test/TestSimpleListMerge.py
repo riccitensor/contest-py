@@ -50,23 +50,23 @@ class TestSimpleListMerge(unittest.TestCase):
 		slm = SimpleListMerge()
 		slm.add('a', resultSet_1)
 		slm.add('b', resultSet_2)
-		unchanged_list = slm.merge( {'a':0.5, 'b' : 0.5} )
+		unchanged_list = slm.merge_naive( {'a':0.5, 'b' : 0.5} )
 
 		self.assertEqual(unchanged_list, resultSet_1, "merging two same lists results the same list")
 
 
 
 
-		resultSet_1 = fb.get_recommendation( userid, additional_filter_1, N=N, remove = True, ranked = True )
-		if self.debug: print resultSet_1
-
-		resultSet_2 = fb.get_recommendation( userid, additional_filter_1, N=N, remove = True, ranked = True )
-		if self.debug: print resultSet_2
-
-
-		slm = SimpleListMerge()
-		slm.add('a', resultSet_1)
-		slm.add('b', resultSet_2)
-		print slm.merge( {'a':0.5, 'b' : 0.5} )
+#		resultSet_1 = fb.get_recommendation( userid, additional_filter_1, N=N, remove = True, ranked = True )
+#		if self.debug: print resultSet_1
+#
+#		resultSet_2 = fb.get_recommendation( userid, additional_filter_1, N=N, remove = True, ranked = True )
+#		if self.debug: print resultSet_2
+#
+#
+#		slm = SimpleListMerge()
+#		slm.add('a', resultSet_1)
+#		slm.add('b', resultSet_2)
+#		print slm.merge_naive( {'a':0.5, 'b' : 0.5} )
 
 
