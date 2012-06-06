@@ -1,7 +1,5 @@
 import unittest
-import _mysql
-from contest.config import config_local
-from contest.packages.controller.http_connector import http_connector
+from contest.config import config_global
 from contest.packages.recommenders.GeneralRecommender import GeneralRecommender
 from contest.packages.writeback.SaveMessage import SaveMessage
 from contest.unitTests.integration.WorkFlowBase import WorkFlowBase
@@ -10,7 +8,6 @@ __author__ = 'karisu'
 
 
 class TestComputation(unittest.TestCase):
-
     debug = True
 
 
@@ -23,31 +20,39 @@ class TestComputation(unittest.TestCase):
         self.wfb.tearDown()
 
 
-
     def test_train_recommender_with_impressions_only_contest(self):
-        backends = [config_global.SAVE_HADOOP_SINK, config_global.SAVE_RANDOM_RECOMMENDER]
-        self.debug = False
+        """
+        todo this is an intermediate unit Test and it might be changed later on when the framework evolves
+        """
+
+
+        # backends = [config_global.SAVE_HADOOP_SINK, config_global.SAVE_RANDOM_RECOMMENDER]
+        backends = [config_global.SAVE_RANDOM_RECOMMENDER]
+        self.debug = True
 
         if not self.debug:
             self.getResults()
             n_maxrows = 10 #amount of items fetched for training
-            result = r.fetch_row(maxrows = n_maxrows) # fetch N row maximum
+            result = r.fetch_row(maxrows=n_maxrows) # fetch N row maximum
         else:
-            result = self.mockMysqlResults()
+            result = self.wfb.mockMysqlResults()
 
+        for result_item in result:
+            json_string = result_item[3]
+            sM = SaveMessage()
 
-        while result:
-            for result_item in result:
+            sM.save(json_string, async=False, api='contest', backends=backends)
+            # todo something do something with the data
 
-                json_string = result_item[3]
-                sM = SaveMessage()
+        gR = GeneralRecommender(json_string, async=False, api='contest', backends=backends)
 
-                sM.save(json_string , async = False, api = 'contest', backends=backends)
-                # todo something do something with the data
+        print gR.recomend()
+        self.assertGreater(len(gR.recomend()), 0)
+
 
 
         # todo sleep for a short while
 
         # todo get a recommendation now
-        GeneralRecommender()
+
 
