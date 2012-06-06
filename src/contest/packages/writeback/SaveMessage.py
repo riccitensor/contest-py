@@ -15,91 +15,94 @@ from contest.packages.queues.QueueBase import QueueBase
 from contest.packages.statistics.userStats import UserStats
 
 class SaveMessage(QueueBase):
-	''' dump messages into various formats '''
-	rawJson = None
-	fullyParsed = None
+    ''' dump messages into various formats '''
+    rawJson = None
+    fullyParsed = None
 
-	queue_name = 'SaveMessage'
-	routing_key = 'SaveMessage'
-	exchange_name = ''
+    queue_name = 'SaveMessage'
+    routing_key = 'SaveMessage'
+    exchange_name = ''
 
-	def __init__(self):
-		'''
-		  get the message, parse it and then save
-		  '''
-
-
+    def __init__(self):
+        '''
+          get the message, parse it and then save
+          '''
 
 
-	def save(self, message, async=False, api = 'contest', backends = ()):
-		"""
-
-		"""
-		if (not async): # save the data instantly
-
-			if api == 'contest':
-				fullParsedDataModel = FullContestMessageParser()
-				parsedMessage = fullParsedDataModel.parse(message)
-				fullParsedDataModel.save()
-
-				raw = rawJsonModel(message, mode='redis')
-				raw.save();
-
-			if api == 'orp':
-				""" todo """
-
-			elif api == 'id_list': ## this for debugging purposes
-				userid = message['userid']
-				itemid = message['itemid']
-				timestamp = message['timestamp']
-				domainid = message['domainid']
-
-				additional_filter = {'domainid' : domainid}
-
-				if config_global.SAVE_RANDOM_RECOMMENDER in backends:
-					fb = Random_Recommender( )
-					fb.set_recommendables(itemid, additional_filter)
-				if config_global.SAVE_HADOOP_SINK in backends:
-					hS = HadoopSink(append = True)
-					rating = 1
-					hS.save_mode2(userid, itemid, domainid, timestamp)
-
-				us = UserStats('userid', 'itemid')
-				us.save(userid,itemid)
 
 
-		else:
-			body_message = {'message' : message,
-							'api' : api,
-							'backends' : backends }
+    def save(self, message, async=False, api = 'contest', backends = ()):
+        """
+        """
+
+        if not async: # save the data instantly
+
+            if api == 'contest':
+                fullParsedDataModel = FullContestMessageParser()
+                parsedMessage = fullParsedDataModel.parse(message)
+                fullParsedDataModel.save()
+
+                raw = rawJsonModel(message, mode='redis')
+                raw.save()
 
 
-			body_message = pickle.dumps(body_message)
+            if api == 'orp':
+                # todo throw not implemented error
+                pass
 
-			self.enqueue(body_message)
-			#from contest.packages.queues.RawJsonDumpWorker import rawJsonDumpWorker
-			#raw = rawJsonDumpWorker(mode='redis')
-			#raw.enqueue(message)
+            elif api == 'id_list': ## this for debugging purposes
+                userid = message['userid']
+                itemid = message['itemid']
+                timestamp = message['timestamp']
+                domainid = message['domainid']
+
+                additional_filter = {'domainid' : domainid}
+
+                if config_global.SAVE_RANDOM_RECOMMENDER in backends:
+                    fb = Random_Recommender( )
+                    fb.set_recommendables(itemid, additional_filter)
+
+                if config_global.SAVE_HADOOP_SINK in backends:
+                    hS = HadoopSink(append = True)
+                    rating = 1
+                    hS.save_mode2(userid, itemid, domainid, timestamp)
+
+                us = UserStats('userid', 'itemid')
+                us.save(userid,itemid)
+
+		#save sync
+        else:
+            body_message = {'message' : message,
+                            'api' : api,
+                            'backends' : backends }
 
 
-	def callback(self, ch, method, properties, body):
-		""" """
-		print "working..."
-		body_message = pickle.loads(body)
+            body_message = pickle.dumps(body_message)
 
-		message = body_message['message']
-		api = body_message['api']
-		backends = body_message['backends']
-		async = False
-		print message
+            self.enqueue(body_message)
+            #from contest.packages.queues.RawJsonDumpWorker import rawJsonDumpWorker
+            #raw = rawJsonDumpWorker(mode='redis')
+            #raw.enqueue(message)
 
-		self.save(message, async, api, backends)
+
+    def callback(self, ch, method, properties, body):
+        """ """
+        print "working..."
+        body_message = pickle.loads(body)
+
+        message = body_message['message']
+        api = body_message['api']
+        backends = body_message['backends']
+        async = False
+        print message
+
+        self.save(message, async, api, backends)
 
 
 if __name__ == '__main__':
 
-	sM = SaveMessage()
-	sM.work()
+    sM = SaveMessage()
+    sM.work()
 
 
 

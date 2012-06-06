@@ -5,7 +5,8 @@ __author__ = 'cw'
 
 import unittest
 from contest.packages.writeback.SaveMessage import SaveMessage
-from contest.packages.models.rawJsonModel import rawJsonModel
+
+
 class SaveMessageTest(unittest.TestCase):
 
 	def setUp(self):

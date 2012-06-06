@@ -14,7 +14,7 @@ class GeneralRecommender(object):
         '''
         Constructor
         '''
-        ## TODO parse the message
+        ## TODO parse the message to know what we are supposed to do
         
     def recomend(self):
         random_recommender = fallback_random()

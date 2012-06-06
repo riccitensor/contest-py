@@ -5,17 +5,20 @@ testing memory consumption of redis
 
 just in case do a "redis-cli flushall beforehand
 
-@author: cw@plista.com
+@author: christian.winkelmann@plista.com
 '''
 import unittest
 from random import random
+import redis
+import random
 
 
 class Test(unittest.TestCase):
 
 
     def setUp(self):
-        pass
+		redis_con = redis.Redis("localhost")
+		redis_con.flushall()
 
 
     def tearDown(self):
@@ -26,9 +29,7 @@ class Test(unittest.TestCase):
         """ test how much redis SETS consume with its memory
         redis-cli info | grep used_memory
         """
-        import redis
-        import random
-        
+
         redis_con = redis.Redis("localhost")
 
         prefix = "fdid:"
