@@ -29,9 +29,7 @@ class SaveMessage(QueueBase):
           '''
 
 
-
-
-    def save(self, message, async=False, api = 'contest', backends = ()):
+    def save(self, message, async=False, api='contest', backends=()):
         """
         """
 
@@ -39,16 +37,25 @@ class SaveMessage(QueueBase):
 
             if api == 'contest':
                 fullParsedDataModel = FullContestMessageParser()
-                parsedMessage = fullParsedDataModel.parse(message)
+                fullParsedDataModel.parse(message)
                 fullParsedDataModel.save()
 
-                raw = rawJsonModel(message, mode='redis')
-                raw.save()
+                item_id = fullParsedDataModel.item_id
 
+                if config_global.SAVE_RAW_JSON in backends:
+                    raw = rawJsonModel(message, mode='redis')
+                    raw.save()
+
+                if config_global.SAVE_RANDOM_RECOMMENDER in backends:
+                    fb = Random_Recommender()
+                    domain_id = fullParsedDataModel.domain_id
+                    additional_filter = {'domainid': domain_id}
+                    fb.set_recommendables(item_id, additional_filter)
 
             if api == 'orp':
                 # todo throw not implemented error
                 pass
+
 
             elif api == 'id_list': ## this for debugging purposes
                 userid = message['userid']
@@ -56,26 +63,26 @@ class SaveMessage(QueueBase):
                 timestamp = message['timestamp']
                 domainid = message['domainid']
 
-                additional_filter = {'domainid' : domainid}
+                additional_filter = {'domainid': domainid}
 
                 if config_global.SAVE_RANDOM_RECOMMENDER in backends:
-                    fb = Random_Recommender( )
+                    fb = Random_Recommender()
                     fb.set_recommendables(itemid, additional_filter)
 
                 if config_global.SAVE_HADOOP_SINK in backends:
-                    hS = HadoopSink(append = True)
+                    hS = HadoopSink(append=True)
                     rating = 1
                     hS.save_mode2(userid, itemid, domainid, timestamp)
 
-                us = UserStats('userid', 'itemid')
-                us.save(userid,itemid)
+                if config_global.SAVE_USER_STATS in backends:
+                    us = UserStats('userid', 'itemid')
+                    us.save(userid, itemid)
 
-		#save sync
+                #save sync
         else:
-            body_message = {'message' : message,
-                            'api' : api,
-                            'backends' : backends }
-
+            body_message = {'message': message,
+                            'api': api,
+                            'backends': backends}
 
             body_message = pickle.dumps(body_message)
 
@@ -100,7 +107,6 @@ class SaveMessage(QueueBase):
 
 
 if __name__ == '__main__':
-
     sM = SaveMessage()
     sM.work()
 
