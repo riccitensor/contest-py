@@ -63,19 +63,33 @@ class SimpleListMerge(object):
 		print tmp_list
 		return mergedList
 
-	def merge_dictionary_naive(self, list_of_dicts, list_of_weights = (0.5, 0.5)):
-		worker1 = { 1 : 0.4, 	2 : 0.5 				}
-		worker2 = { 			2 : 0.4, 	3 : 0.5 	}
+	def merge_dictionary_naive(self, list_of_dicts = {}, list_of_weights = { 'worker1' : 0.5, 'worker2' : 0.4, 'worker3' : 0.1} ):
+		worker1 = { 1 : 0.4		 		 							}
+		worker2 = { 			2 : 0.4, 	3 : 0.5 				}
+		worker3 = { 			2 : 0.2, 				4 : 0.01 	}
 
 		list_of_dicts = { 	'worker1' : worker1,
-					   		'worker2' : worker2 }
+					   		'worker2' : worker2,
+							'worker3' : worker3}
+
+		intersect = []
+		for workername, recList in list_of_dicts.items():
+
+			for item in recList.keys():
+				if not item in intersect :
+					intersect.append(item)
+
+		print intersect
+
+
+		# generate list of all items with according worker weight
+
+		for key, value in list_of_weights.items():
+			''' '''
 
 
 
-
-
-
-		desiredResult = { 1 : 0.4, 2 : 0.45, 3 : 0.5 }
+		#desiredResult = { 1 : 0.4, 2 : 0.45, 3 : 0.5 }
 
 
 

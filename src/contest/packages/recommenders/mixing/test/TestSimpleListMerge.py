@@ -56,6 +56,12 @@ class TestSimpleListMerge(unittest.TestCase):
 
 
 
+	def test_merge_dictionary_naive(self):
+
+		slm = SimpleListMerge()
+
+		slm.merge_dictionary_naive()
+
 
 #		resultSet_1 = fb.get_recommendation( userid, additional_filter_1, N=N, remove = True, ranked = True )
 #		if self.debug: print resultSet_1
