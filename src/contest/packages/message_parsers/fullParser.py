@@ -6,7 +6,6 @@ This parser suits the task to fully interpret and flatten the json message we ge
 @author: christian.winkelmann@plista.com
 '''
 
-
 import logging
 import json
 from contest.packages.models.interpretedJSON import interpretedJsonModel
@@ -18,14 +17,23 @@ class FullContestMessageParser(object):
     flattenedJson = None
 
 
-    def __init__(self, mode = 'redis'):
+    def __init__(self, mode='redis'):
         '''
         Constructor
         '''
         self.object = None
         self.flattenedJson = dict()
 
-
+        self.config_team_id = None
+        self.context = None
+        self.domain_id = None
+        self.item_id = None
+        self.item_created = None
+        self.message_id = None
+        self.message_type = None
+        self.text = None
+        self.title = None
+        self.user_id = None
 
         if mode == 'redis':
             self.save = self.save_redis
@@ -49,7 +57,6 @@ class FullContestMessageParser(object):
                 print "no version given"
 
         if ( self.version == '1.0'):
-
             try:
                 self.message_type = message[u'msg']
                 self.flattenedJson['msg'] = message[u'msg']
@@ -59,14 +66,14 @@ class FullContestMessageParser(object):
                     print "no message type given, probably an error"
 
             try:
-                self.client_id = message[u'client'][u'id']
                 self.flattenedJson['client_id'] = message[u'client'][u'id']
+                self.user_id = int(message[u'client'][u'id'])
             except:
                 if (debug == True):
                     print "no client id given"
 
             try:
-                self.domain_id = message[u'domain'][u'id']
+                self.domain_id = int(message[u'domain'][u'id'])
                 self.flattenedJson['domain_id'] = message[u'domain'][u'id']
             except:
                 if (debug == True):
@@ -97,16 +104,14 @@ class FullContestMessageParser(object):
                     print "config not set"
 
 
-############### message type is IMPRESSION #######################                
+                ############### message type is IMPRESSION #######################
             if ( self.message_type == 'impression'):
-
                 try:
-                    self.impression_id = message[u'id']
+                    self.message_id = message[u'id']
                     self.flattenedJson['impression_id'] = message[u'id']
                 except:
                     if(debug):
                         print "no impression id given"
-
 
                 try:
                     self.item = message[u'item']
@@ -171,8 +176,6 @@ class FullContestMessageParser(object):
                         print "no item given"
                         item = False
 
-
-
                 if (self.config):
                     try:
                         self.config_recommend = self.config[u'recommend']
@@ -192,7 +195,7 @@ class FullContestMessageParser(object):
 
 
 
-############### message type is feedback #######################                
+                            ############### message type is feedback #######################
             elif ( self.message_type == 'feedback'):
                 """ ok, we have a feedback """
                 try:
@@ -211,7 +214,7 @@ class FullContestMessageParser(object):
 
 
 
-############### message type is RESULT #######################            
+                    ############### message type is RESULT #######################
             elif ( self.message_type == 'result'):
                 """ ok, we have a result set. This set is not part of the ordinary contest data.
                 This is a log of what other teams have sent into the contest """
@@ -219,7 +222,7 @@ class FullContestMessageParser(object):
 
 
 
-############### message type is ERROR #######################            
+            ############### message type is ERROR #######################
             elif ( self.message_type == 'error'):
                 print " ok, we have an error "
                 self.flattenedJson = None
@@ -241,7 +244,7 @@ class FullContestMessageParser(object):
                 except:
                     "something is seriously wrong when we can't even parse an error"
 
-            #print flattenedJsone
+                    #print flattenedJsone
 
 
 
@@ -250,9 +253,7 @@ class FullContestMessageParser(object):
             print "wrong version"
             self.flattenedJson = None
 
-
         return self.flattenedJson
-
 
 
     def save_redis(self):
