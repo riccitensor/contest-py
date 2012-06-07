@@ -23,12 +23,14 @@ class GeneralRecommender(object):
 
         domain_id = fullParsedDataModel.domain_id
         user_id = fullParsedDataModel.user_id
-        additional_filter = {'domainid': domain_id}
+        
+        # now compile the constraints
+        constraints = {'domainid': domain_id}
 
         random_recommender = Random_Recommender()
         N = 4
-        random_recommender.train(user_id, additional_filter)
-        self.resultSet = random_recommender.get_recommendation(user_id, additional_filter, N=N, remove=False)
+        random_recommender.train(user_id, constraints)
+        self.resultSet = random_recommender.get_recommendation(user_id, constraints, N=N, remove=True)
 
         # TODO parse the message to know what we are supposed to do: i.e. grab the constraints out of the data
 
@@ -37,7 +39,7 @@ class GeneralRecommender(object):
 
         # TODO initialize a new training session if necessary
 
-    def recomend(self):
+    def recommend(self):
         ''' lets hope there are recommendation ready for this user/constrain '''
         return self.resultSet
 

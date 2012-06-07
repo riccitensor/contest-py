@@ -87,7 +87,7 @@ if __name__ == '__main__':
 			current_time = time2.time()
 
 			sM = SaveMessage()
-			sM.save( id_list, async = False, api = 'id_list', backends = (config_global.SAVE_USER_STATS) )
+			sM.save( id_list, async = False, api = 'id_list', backends = [ config_global.SAVE_USER_STATS ] )
 
 			"""
 			if (SAVE_DIMENSION_LIST):

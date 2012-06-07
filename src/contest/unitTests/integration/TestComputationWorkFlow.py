@@ -46,8 +46,8 @@ class TestComputation(unittest.TestCase):
 
         gR = GeneralRecommender(json_string, async=False, api='contest', backends=backends)
 
-        print gR.recomend()
-        self.assertGreater(len(gR.recomend()), 0)
+        print gR.recommend()
+        self.assertGreater(len(gR.recommend()), 0)
 
 
 
