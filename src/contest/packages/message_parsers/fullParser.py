@@ -42,7 +42,7 @@ class FullContestMessageParser(object):
 
 
     def parse(self, json_string):
-        debug = True
+        debug = False
 
         #print json_string
         #json.loads(s, encoding, cls, object_hook, parse_float, parse_int, parse_constant, object_pairs_hook)
@@ -104,7 +104,7 @@ class FullContestMessageParser(object):
                     print "config not set"
 
 
-                ############### message type is IMPRESSION #######################
+                    ############### message type is IMPRESSION #######################
             if ( self.message_type == 'impression'):
                 try:
                     self.message_id = message[u'id']
@@ -195,7 +195,7 @@ class FullContestMessageParser(object):
 
 
 
-                            ############### message type is feedback #######################
+                                ############### message type is feedback #######################
             elif ( self.message_type == 'feedback'):
                 """ ok, we have a feedback """
                 try:
@@ -214,7 +214,7 @@ class FullContestMessageParser(object):
 
 
 
-                    ############### message type is RESULT #######################
+                        ############### message type is RESULT #######################
             elif ( self.message_type == 'result'):
                 """ ok, we have a result set. This set is not part of the ordinary contest data.
                 This is a log of what other teams have sent into the contest """
