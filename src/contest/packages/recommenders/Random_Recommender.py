@@ -155,6 +155,7 @@ class Random_Recommender(baseRecommender):
             key = self.compute_key(additional_filter)
         self.redis_con.sadd(key, itemid)
 
+
     def get_recommendable_item(self, additional_filter=None, key=None):
         if key is None:
             key = self.compute_key(additional_filter)
@@ -162,8 +163,10 @@ class Random_Recommender(baseRecommender):
         recommendable_item = self.redis_con.srandmember(key)
         return recommendable_item
 
+
     def get_amount_of_recommendables(self, key ):
         return self.redis_con.scard(key)
+
 
     def del_recommendables(self, itemid, additional_filter):
         """ delete an recommendable item again """
