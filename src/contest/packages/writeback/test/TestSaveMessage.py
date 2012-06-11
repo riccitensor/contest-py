@@ -74,22 +74,34 @@ class SaveMessageTest(unittest.TestCase):
 
             sM.save(id_list, async=True, api='id_list', backends=backends)
 
+        self.assertEqual(1, 0, "implement this test!")
+
 
     def test_SaveMessage_userStats(self):
         ''' tests the generation of statistics from the incoming stream of data
         '''
+        self.assertEqual(1, 0, "implement this test!")
+        pass
+
+
+    def test_SaveMessage_userStats_async(self):
+        ''' tests the generation of statistics from the incoming stream of data
+        '''
+        self.assertEqual(1, 0, "implement this test!")
         pass
 
 
     def test_RandomRecommender(self):
         backend = [config_global.SAVE_RANDOM_RECOMMENDER]
         self.saveJson(backend)
-
+        userid = 1
+        N = 4
         fb = Random_Recommender()
         additional_filter_1 = {'domainid': 'domain1'}
         fb.train(userid, additional_filter_1) # train for the specific user and the filter
 
         resultSet_1 = fb.get_recommendation(userid, additional_filter_1, N=N, remove=False)
+        print resultSet_1
 
 if __name__ == '__main__':
     unittest.main()
