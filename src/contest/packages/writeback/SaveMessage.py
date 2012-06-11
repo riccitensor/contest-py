@@ -29,7 +29,7 @@ class SaveMessage(QueueBase):
           '''
 
 
-    def save(self, message, async=False, api='contest', backends=()):
+    def save(self, message, async=False, api='contest', backends=(), constraints={}):
         """
         """
 
@@ -49,8 +49,9 @@ class SaveMessage(QueueBase):
                 if config_global.SAVE_RANDOM_RECOMMENDER in backends:
                     fb = Random_Recommender()
                     domain_id = fullParsedDataModel.domain_id
-                    additional_filter = {'domainid': domain_id}
-                    fb.set_recommendables(item_id, additional_filter)
+                    ## todo the recommender has to decide on its own what to save and therefore save constraints, even though the constrain management should be centralized
+                    #constraints = {'domainid': domain_id}
+                    fb.set_recommendables(item_id, constraints)
 
             if api == 'orp':
                 # todo throw not implemented error
@@ -78,7 +79,7 @@ class SaveMessage(QueueBase):
                     us = UserStats('userid', 'itemid')
                     us.save(userid, itemid)
 
-                #save sync
+                    #save sync
         else:
             body_message = {'message': message,
                             'api': api,
