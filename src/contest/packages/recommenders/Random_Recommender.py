@@ -26,7 +26,6 @@ class Random_Recommender(baseRecommender):
 
 
     def compute_key(self, constraints, userid=None):
-        print ""
         if userid is None: suffix = ""
         else: suffix = ":userid:{}".format(userid)
 
@@ -76,7 +75,8 @@ class Random_Recommender(baseRecommender):
         recList = []
         i = 0
         if (
-        self.get_amount_of_recommendables(recommendable_key) >= N): #we have more items then we have to ignore + we need
+            self.get_amount_of_recommendables(
+                recommendable_key) >= N): #we have more items then we have to ignore + we need
             while (i < N):
                 recommendable_item = self.get_recommendable_item(key=recommendable_key)
 
