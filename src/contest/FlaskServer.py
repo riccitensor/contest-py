@@ -61,7 +61,7 @@
 #    return 'text: ' + text + ' str: ' + str(myid) + '\n'
 #"""
 #"""
-#@app.route('/statistics/userstats', methods=['GET', 'POST'])
+#@app.route('/statistics/ObjectByObject', methods=['GET', 'POST'])
 #def test_http_param_ext():
 #    if request.method == 'GET':
 #        text = request.args.get('text', '')

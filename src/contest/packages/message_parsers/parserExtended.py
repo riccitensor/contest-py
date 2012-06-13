@@ -7,7 +7,7 @@
 #
 #
 #from packages.recommenders.fallback_random import fallback_random
-#from packages.statistics.userStats import UserStats
+#from packages.statistics.ObjectByObject import ObjectByObject
 #
 #import logging
 #import json
@@ -56,7 +56,7 @@
 #				
 #				"""  save the statistics, this is very important because it will prevent showing the same items again and again 
 #				"""
-#				us = UserStats(user_id, item_id)
+#				us = ObjectByObject(user_id, item_id)
 #				""" save this item as recommendable """
 #				self.fp.set_recommendables(str(item_id))
 #				

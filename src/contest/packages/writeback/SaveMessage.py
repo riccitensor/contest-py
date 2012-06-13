@@ -12,7 +12,7 @@ from contest.packages.models.rawJsonModel import rawJsonModel
 from contest.packages.message_parsers.fullParser import FullContestMessageParser
 from contest.packages.recommenders.Random_Recommender import Random_Recommender
 from contest.packages.queues.QueueBase import QueueBase
-from contest.packages.statistics.userStats import UserStats
+from contest.packages.models.ObjectByObject import ObjectByObject
 
 class SaveMessage(QueueBase):
     ''' dump messages into various formats '''
@@ -79,7 +79,7 @@ class SaveMessage(QueueBase):
             self.__save_hadoop_sink(userid, itemid, domainid, timestamp)
 
         if config_global.SAVE_USER_STATS in backends:
-            self.__save_userstats('userid', userid, 'itemid', itemid)
+            self.__save_ObjectByObject('userid', userid, 'itemid', itemid)
 
 
     def save_orp(self, message):
@@ -102,7 +102,7 @@ class SaveMessage(QueueBase):
             self.__save_hadoop_sink(userid, itemid, domainid, timestamp)
 
         if config_global.SAVE_USER_STATS in backends:
-            self.__save_userstats('userid', userid, 'itemid', itemid)
+            self.__save_ObjectByObject('userid', userid, 'itemid', itemid)
 
 
     def __save_random_recommender(self, itemid, constraint={}):
@@ -116,8 +116,8 @@ class SaveMessage(QueueBase):
         hS.save_mode2(userid, itemid, domainid, timestamp)
 
 
-    def __save_userstats(self, idname1, id1, idname2, id2 ):
-        us = UserStats(idname1, idname2)
+    def __save_ObjectByObject(self, idname1, id1, idname2, id2 ):
+        us = ObjectByObject(idname1, idname2)
         us.save(id1, id2)
 
 

@@ -4,7 +4,7 @@ Created on 16.11.2011
 @author: christian.winkelmann@plista.com
 '''
 
-from contest.packages.statistics.userStats import UserStats
+from contest.packages.models.ObjectByObject import ObjectByObject
 
 import logging
 import json
@@ -49,7 +49,7 @@ class default_parser(object):
 
                 """  save the statistics, this is very important because it will prevent showing the same items again and again 
                 """
-                us = UserStats(user_id, item_id)
+                us = ObjectByObject(user_id, item_id)
                 """ save this item as recommendable """
                 self.fp.set_recommendables(str(item_id))
 

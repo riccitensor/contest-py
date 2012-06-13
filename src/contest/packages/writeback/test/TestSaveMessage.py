@@ -77,14 +77,14 @@ class SaveMessageTest(unittest.TestCase):
         self.assertEqual(1, 0, "implement this test!")
 
 
-    def test_SaveMessage_userStats(self):
+    def test_SaveMessage_ObjectByObject(self):
         ''' tests the generation of statistics from the incoming stream of data
         '''
         self.assertEqual(1, 0, "implement this test!")
         pass
 
 
-    def test_SaveMessage_userStats_async(self):
+    def test_SaveMessage_ObjectByObject_async(self):
         ''' tests the generation of statistics from the incoming stream of data
         '''
         self.assertEqual(1, 0, "implement this test!")
