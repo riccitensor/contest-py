@@ -58,7 +58,6 @@ def incoming_contest_call():
         return "GET"
     if request.method == 'POST':
         
-        import json
         import urllib
        
         logging.debug('"POST message\n "')
