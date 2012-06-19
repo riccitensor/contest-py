@@ -82,8 +82,8 @@ contest/packages/statistics/__init__.py
 contest/packages/statistics/display.py
 contest/packages/statistics/histogramm.py
 contest/packages/statistics/histogramm_graph.py
-contest/packages/statistics/userStats.py
-contest/packages/statistics/test/TestUserStats.py
+contest/packages/statistics/ObjectByObject.py
+contest/packages/statistics/test/TestObjectByObject.py
 contest/packages/statistics/test/__init__.py
 contest/packages/writeback/SaveMessage.py
 contest/packages/writeback/__init__.py
