@@ -1,8 +1,9 @@
 __author__ = 'karisu'
 
 import unittest
+from test_scripts.disco.Create_User_Item_Matrix import Create_User_Item_Matrix
 
-class Test_Creater_User_Item(unittest.TestCase):
+class Test_Create_User_Item(unittest.TestCase):
 
     def setUp(self):
         pass
@@ -13,7 +14,8 @@ class Test_Creater_User_Item(unittest.TestCase):
 
 
     def testMap(self):
-        pass
-        #create = Create_User_Item_Matrix
+        line = "1,2"
+
+        Create_User_Item_Matrix().map(line)
 
 

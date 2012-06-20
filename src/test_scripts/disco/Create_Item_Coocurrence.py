@@ -16,17 +16,39 @@ class Create_Item_Coocurrence(Job):
     @staticmethod
     def map(line, params):
         """
-        userid json of all items
+        line: userid json of all items
         """
+        print line
+        split = line.split()
+        key = split[0]
+        value = split[1]
+        value = json.loads(value)
 
-        yield "userid", 1
+        # todo compute the outer product now
+
+        # todo return these matrices
+        yield key, value
 
 
     @staticmethod
     def reduce(iter, params):
         """
+        item, matrix
         """
-        yield "bla", 1
+        from disco.util import kvgroup
+
+        debug = False
+
+        for userid, itemids in kvgroup(sorted(iter)):
+            itemids_dict = {}
+            for itemid in itemids:
+                if debug:
+                    print "reduce: userid:{} itemid:{}".format(userid, itemid)
+                itemids_dict[itemid] = True
+
+            itemids = itemids_dict.keys()
+            yield userid, json.dumps(itemids)
+
 
 
 
