@@ -7,7 +7,7 @@ from disco.job import Job
 from disco.worker.classic.func import chain_reader
 
 
-class Create_User_Item_Histogramm_combiner(Job):
+class Create_Item_Based_CF(Job):
     """ from all the single ratings we are making a USER x ITEM Matrix
 
     """
@@ -16,8 +16,10 @@ class Create_User_Item_Histogramm_combiner(Job):
     @staticmethod
     def map(line, params):
         #print "map"
-        mytuple = line.split(',')
+        mytuple = line.split() # split userid and all the items he has seen
 
+        userid = int(mytuple)
+        itemids = mytuple[1].split(',')
         #print mytuple[0]
         #print ""
         yield mytuple[0], 1

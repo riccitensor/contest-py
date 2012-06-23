@@ -4,10 +4,9 @@ __author__ = 'karisu'
 
 
 from disco.job import Job
-from disco.worker.classic.func import chain_reader
 
 
-class Create_User_Item_Histogramm_combiner(Job):
+class Create_User_Average_Item(Job):
     """ from all the single ratings we are making a USER x ITEM Matrix
 
     """
@@ -15,12 +14,10 @@ class Create_User_Item_Histogramm_combiner(Job):
 
     @staticmethod
     def map(line, params):
-        #print "map"
-        mytuple = line.split(',')
+        mytuple = line.split()
 
-        #print mytuple[0]
-        #print ""
-        yield mytuple[0], 1
+        yield "average", mytuple[1]
+        yield "user_num", 1
 
 
     @staticmethod
@@ -30,13 +27,13 @@ class Create_User_Item_Histogramm_combiner(Job):
             try:
                 buffer[key]
             except KeyError:
-                buffer[key] = None
+                buffer[key] = 0
 
             # Test whether variable is defined to be None
             if buffer[key] is None:
-                buffer[key] = 1
+                buffer[key] = int(value)
             else:
-                buffer[key] += 1
+                buffer[key] += int(value)
 
         else :
             for key_, value_ in buffer.items():
@@ -44,21 +41,20 @@ class Create_User_Item_Histogramm_combiner(Job):
 
             buffer.clear()
 
+
+    """
     @staticmethod
     def partition(key, nrp, params):
         return int(key) % int(nrp)
+    """
+
 
     @staticmethod
     def reduce(iter, params):
-        #print " ============= reduce =================="
         from disco.util import kvgroup
-        #import redis
-        #redis_con = redis.Redis('localhost')
 
         for key, counts in kvgroup(sorted(iter)):
             sum_counts = sum(counts)
+            #print "reduce: sum_counts {}".format(sum_counts)
             yield key, sum_counts
-            #redis_con.zadd('userHistogramm', key, sum_counts )
-
-
 
