@@ -18,7 +18,7 @@ class Create_Item_Based_CF(Job):
         #print "map"
         mytuple = line.split() # split userid and all the items he has seen
 
-        userid = int(mytuple)
+        userid = int(mytuple[0])
         itemids = mytuple[1].split(',')
         #print mytuple[0]
         #print ""

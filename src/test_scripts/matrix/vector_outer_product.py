@@ -25,8 +25,14 @@ B = v2_transpose * v2
 print "B"
 print B
 
+D = lil_matrix((10, 10)) # create Row-based linked list sparse matrix
+
 print "A + B"
-print A + B
+D = D + A
+print D
+print ""
+D = D + B
+print D
 
 
 v3 = lil_matrix((1, 10)) # create Row-based linked list sparse matrix

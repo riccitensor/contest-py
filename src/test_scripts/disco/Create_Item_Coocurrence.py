@@ -1,4 +1,5 @@
 import json
+from scipy.sparse.lil import lil_matrix
 
 __author__ = 'karisu'
 
@@ -18,16 +19,25 @@ class Create_Item_Coocurrence(Job):
         """
         line: userid json of all items
         """
-        print line
+        from scipy.sparse.lil import lil_matrix
+        # todo get the size of the matrix from a cache or somewhere else
+
+        v1 = lil_matrix((1, 1000)) # create Row-based linked list sparse matrix
+
+        # one line is userid itemid_1,itemid_2,...
+
         split = line.split()
-        key = split[0]
-        value = split[1]
-        value = json.loads(value)
+        userid = split[0]
+        itemids = split[1]
+        itemid_list = itemids.split(',')
 
-        # todo compute the outer product now
+        for id in itemid_list:
+            v1[0,int(id)] = 1
 
-        # todo return these matrices
-        yield key, value
+        v1_transpose = v1.transpose()
+        matrix_A = v1_transpose * v1
+
+        yield userid, matrix_A
 
 
     @staticmethod
@@ -36,18 +46,19 @@ class Create_Item_Coocurrence(Job):
         item, matrix
         """
         from disco.util import kvgroup
+        from scipy.sparse.lil import lil_matrix
 
         debug = False
 
-        for userid, itemids in kvgroup(sorted(iter)):
-            itemids_dict = {}
-            for itemid in itemids:
-                if debug:
-                    print "reduce: userid:{} itemid:{}".format(userid, itemid)
-                itemids_dict[itemid] = True
+        cooccurence_matrix = lil_matrix((1000, 1000)) # create Row-based linked list sparse matrix
 
-            itemids = itemids_dict.keys()
-            yield userid, json.dumps(itemids)
+        for userid, matrizes in kvgroup(sorted(iter)):
+
+            for matrix in matrizes:
+                #print matrix
+                cooccurence_matrix = cooccurence_matrix + matrix
+
+        yield 'cooc', cooccurence_matrix
 
 
 
