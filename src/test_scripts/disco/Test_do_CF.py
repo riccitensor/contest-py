@@ -1,21 +1,26 @@
 from disco.core import result_iterator
+from Create_Arbitrary_Item_Similarities import Create_Arbitrary_Item_Similarities
 
-__author__ = 'karisu'
+
+
 
 import unittest
 import redis
+from Create_Norms import Create_Norms
 from Create_Item_Coocurrence import Create_Item_Coocurrence
-import disco
 
-from test_scripts.disco.Create_User_Item_Matrix import Create_User_Item_Matrix
+__author__ = 'karisu'
 
 
-class Test_Create_User_Item(unittest.TestCase):
+
+
+
+
+class Test_Do_CF(unittest.TestCase):
 
     redis_con = None
 
     def setUp(self):
-        pass
         self.redis_con = redis.Redis('localhost')
         self.redis_con.flushall()
 
@@ -47,12 +52,39 @@ class Test_Create_User_Item(unittest.TestCase):
         data = Create_Item_Coocurrence().run(input=[location])
 
         for key, value in result_iterator(data.wait(show=True)):
+            print type(value)
+            print "sum {} ".format( value[1,:].sum() )
             print key, value
 
+
+
         # todo 2. compute jaccard coefficient
+        # todo 2.1  implement preprocess, but not necessary with binary data
+        # todo 2.2. implement norm
+        # todo 2.3  implement dot_i_j
+        # todo implement S_i_j = similarity(dot_i_j, n_i, n_j)
 
 
         # todo 3. make a recommendation
+
+
+    def test_CF_Arbitrary_Sim(self):
+        location = "http://localhost/user_item_matrix"
+
+        norms = Create_Norms().run(input=[location]).wait(show=False)
+
+    # 1. create coocurences
+        data = Create_Arbitrary_Item_Similarities().run(input=[location])
+
+
+        for key, value in result_iterator(data.wait(show=True)):
+            #print type(value)
+            #print "sum {} ".format( value[1,:].sum() )
+            print key, value
+            #print value.toarray()
+
+
+            # todo 3. make a recommendation
 
 
 

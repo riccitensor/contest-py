@@ -35,9 +35,12 @@ class Create_Item_Coocurrence(Job):
             v1[0,int(id)] = 1
 
         v1_transpose = v1.transpose()
+
         matrix_A = v1_transpose * v1
 
         yield userid, matrix_A
+
+
 
 
     @staticmethod
