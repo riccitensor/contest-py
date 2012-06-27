@@ -63,7 +63,6 @@ class Create_Arbitrary_Item_Similarities(Job):
         redis_con = redis.Redis('localhost')
 
         key_norms = 'create_norms_rated'
-        #norms = redis_con.zrange(key, 0, -1, withscores=True)
 
         key_id_list = 'create_norms_idlist'
         id_list = redis_con.smembers(key_id_list)
@@ -75,30 +74,23 @@ class Create_Arbitrary_Item_Similarities(Job):
 
         cooccurence_matrix = csr_matrix((5, 5)) # create Row-based linked list sparse matrix
 
-        #cooccurence_matrix[1,1] = 999
 
         for id, matrizes in kvgroup(sorted(iter)):
             # the id is an userid oder itemid
             id = int(id)
             norm_for_id = int( redis_con.zscore(key_norms, id) )
 
-            # load the norms
-            #norms = {1 : 2, 2 : 2, 3 : 1}
-
             for matrix in matrizes:
-                #print matrix
                 cooccurence_matrix = cooccurence_matrix + matrix
 
-            print type(cooccurence_matrix)
             cooccurence_matrix = cooccurence_matrix.tolil()
 
             for norm_id in id_list:
-                print "id: {}".format(id)
+                print "constant id: {}".format(id)
                 norm_id = int(norm_id)
                 #print "norm: {}".format(norm)
                 #print "norm_id: {}".format(norms[id])
                 norm_other_id = int( redis_con.zscore(key_norms, norm_id) )
-                #print "cooccurence_matrix[id,norm_id]: {}".format(cooccurence_matrix[id,norm_id])
 
                 cooccurence_matrix[id, norm_id] = cooccurence_matrix[id, norm_id] / (  norm_other_id +  norm_for_id - cooccurence_matrix[id, norm_id] )
 

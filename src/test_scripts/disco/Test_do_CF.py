@@ -73,6 +73,8 @@ class Test_Do_CF(unittest.TestCase):
 
         norms = Create_Norms().run(input=[location]).wait(show=False)
 
+        for key, value in result_iterator(norms):
+            print key, value
     # 1. create coocurences
         data = Create_Arbitrary_Item_Similarities().run(input=[location])
 
