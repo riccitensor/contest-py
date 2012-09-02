@@ -58,29 +58,15 @@ class Random_Recommender(baseRecommender):
         """
         #
         key = self.compute_recommendationsListKey(constraints, userid)
-        if not ranked:
-            resultSet = self.redis_con.zrevrange(key, 0, N - 1)
-        elif ranked:
-            resultSet = self.redis_con.zrevrange(key, 0, N - 1, withscores=True)
+        resultSet = self.redis_con.zrevrange(key, 0, N - 1, withscores=ranked)
 
         if remove: self.invalidate_recommended_items(key, resultSet)
 
+        # TODO trigger training if something is wrong
+        if len(resultSet) < N:
+            self.train( userid, constraints ) # train for the specific user and the filter
+
         return resultSet
-
-        '''
-        @param userid: even though the recommendations are random we have to exclude items we already presented '''
-        # todo grab the items and create a random list
-
-        # @todo first get all recommendable items
-
-        # @todo get the items the user has seen already seen, or other excluding factors
-
-        # @todo compute the list of recommendations
-        #self.userid
-
-        #recList = RecommendationList(self.key, mode='redis')
-        #recList = recList.get()
-        #return recList
 
 
     def train(self, userid, addition_filter, N=10 ):
