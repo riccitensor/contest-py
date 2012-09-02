@@ -14,30 +14,26 @@ class remoteWorker(object):
 
 
     def __init__(self):
-        '''
-        Constructor
-        '''
+        self.connection = pika.BlockingConnection(pika.ConnectionParameters(
+            host='localhost'))
+        self.channel = self.connection.channel()
+        self.channel.queue_declare(queue='hello')
         
     def main(self):    
         """ main function """
 
-        connection = pika.BlockingConnection(pika.ConnectionParameters(
-                host='localhost'))
-        channel = connection.channel()
-        
-        channel.queue_declare(queue='hello')
-        
+
         print ' [*] Waiting for messages. To exit press CTRL+C'
                 
-        channel.basic_consume(self.callback,
+        self.channel.basic_consume(self.callback,
                               queue='hello',
-                              no_ack=True)
+                              no_ack=False)
         
-        channel.start_consuming()
+        self.channel.start_consuming()
         
     def callback(self, ch, method, properties, body):
         #time.sleep(0.5)
-        print " [2] Received %r" % (body) + "and written to redis"
+        print " [2] Received %r" % body + "and written to redis"
         #self.enqueue(body)
         
         
