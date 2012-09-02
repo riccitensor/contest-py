@@ -22,6 +22,7 @@ class ProcessMessage_Impression(object):
         if message.config_recommend:
             self.result = self.recommend(message)
 
+        # anything else will be done async
         if message.item_recommendable:
             self.store_recommendable_item(message)
 
@@ -37,11 +38,19 @@ class ProcessMessage_Impression(object):
 #        return "bla"
 
     def recommend(self, message):
-        """ now the actual Recommendation is done """
+        """ now the actual Recommendation is done
+            @type message: FullContestMessageParser
+            @param message: a general message.
+        """
+
         if self.RANDOM_RECOMMENDER_ENABLED:
             fb = Random_Recommender()
             domain_id = message.domain_id
-            result = fb.get_recommendable_item( { 'domainid' : domain_id } )
+            user_id = message.user_id
+            limit = message.config_limit
+            result = fb.get_recommendation(user_id, { 'domainid' : domain_id }, limit, remove=True, ranked=True )
+
+        # TODO start mixing the results
 
         return result
 

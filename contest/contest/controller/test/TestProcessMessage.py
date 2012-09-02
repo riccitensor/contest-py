@@ -23,7 +23,7 @@ class TestFullParser(unittest.TestCase):
         the result has to be non empty and with items among the first if they were recommendable
         """
         recommend_flag = False
-        for i in range(1,10):
+        for i in range(1,20):
             message = self.get_custom_impression_message(
                 id_flag = i, # autoincrement message ids
                 client_id_flag = i % 3, # three users are making the impression
@@ -37,7 +37,7 @@ class TestFullParser(unittest.TestCase):
 
         # compose a recommendation request message
         message = self.get_custom_impression_message(
-            id_flag = 11,
+            id_flag = 21,
             client_id_flag = 1, # three users are making the impression
             item_id_flag = 1,
             recommendable_flag = False,

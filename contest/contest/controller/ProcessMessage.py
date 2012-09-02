@@ -35,6 +35,8 @@ class ProcessMessage(object):
 #                # trigger some sort of training
 #                pass
 
+        # TODO now we can enque the message
+
 
         # todo log raw the message somewhere
 
