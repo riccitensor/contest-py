@@ -39,15 +39,10 @@ class workGenerator(object):
 if __name__ == '__main__':
     print "send out some work"
     wg = workGenerator()
-    for i in xrange(1, 1000000):
+    for i in xrange(1, 1000):
         if i % 1000 == 0:
             print i
         wg.enqueue(str(i))
         #time.sleep(0.01)
-        """ wg.enqueue("keks")
-        wg.enqueue("bla")
-        
-        wg.enqueue("whitehorse")
-        wg.enqueue("whitehorse") """
-        
+
     

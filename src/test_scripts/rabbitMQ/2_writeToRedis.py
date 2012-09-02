@@ -35,6 +35,11 @@ class remoteWorker(object):
         #time.sleep(0.5)
         print " [2] Received %r" % body + "and written to redis"
         #self.enqueue(body)
+        test = body
+
+        ch.basic_ack(delivery_tag = method.delivery_tag)
+
+        #pass
         
         
     def enqueue(self, _body):
