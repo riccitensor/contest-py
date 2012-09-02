@@ -11,8 +11,8 @@ from contest.packages.models.HadoopSink import HadoopSink
 from contest.packages.models.rawJsonModel import rawJsonModel
 from contest.packages.message_parsers.FullContestMessageParser import FullContestMessageParser
 from contest.packages.recommenders.Random_Recommender import Random_Recommender
-from contest.packages.queues.QueueBase import QueueBase
 from contest.packages.models.ObjectByObject import ObjectByObject
+from contest.worker import QueueBase
 
 class SaveMessage(QueueBase):
     ''' dump messages into various formats '''
