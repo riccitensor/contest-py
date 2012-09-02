@@ -6,7 +6,6 @@ The result is dissappointing. Since multiple where conditions fail to result
 
 @author: christian.winkelmann@plista.com
 '''
-import unittest
 import time
 from contest.packages.models.itemModel import itemModel 
 
