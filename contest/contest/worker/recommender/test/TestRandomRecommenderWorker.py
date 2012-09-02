@@ -1,7 +1,6 @@
 import unittest
 import redis
-
-
+from contest.packages.recommenders.Random_Recommender import Random_Recommender
 
 
 class TestRandomRecommenderWorker(unittest.TestCase):
