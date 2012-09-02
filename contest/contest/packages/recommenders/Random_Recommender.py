@@ -17,7 +17,7 @@ class Random_Recommender(baseRecommender):
     this will be the most naive recommender which just outputs random recommendations
     '''
     key = None
-    itemList = "recommendable_items"
+
     userid = None
 
     def __init__(self):
@@ -26,21 +26,38 @@ class Random_Recommender(baseRecommender):
 
 
     def compute_key(self, constraints, userid=None):
+        itemList = "recommendable_items"
         if userid is None: suffix = ""
         else: suffix = ":userid:{}".format(userid)
 
         for key, value in constraints.items():
-            suffix = suffix + ":{}:{}".format(str(key), str(value))
-        key = self.itemList + suffix
+            suffix += ":{}:{}".format(str(key), str(value))
+        key = itemList + suffix
 
         return key
+
+    def compute_recommendationsListKey(self, constraints, userid=None):
+        itemList = "recommendationList"
+        if userid is None: suffix = ""
+        else: suffix = ":userid:{}".format(userid)
+
+        for key, value in constraints.items():
+            suffix += ":{}:{}".format(str(key), str(value))
+        key = itemList + suffix
+
+        return key
+
+    def compute_recommendablesKey(self):
+        # todo implement this
+        pass
 
     def get_recommendation(self, userid, constraints, N, remove=False, ranked=False):
         """ fetch a random recommendation
         @param N number of recommendations
         @param itemids which should be ignored
         """
-        key = self.compute_key(constraints, userid)
+        #
+        key = self.compute_recommendationsListKey(constraints, userid)
         if not ranked:
             resultSet = self.redis_con.zrevrange(key, 0, N - 1)
         elif ranked:
@@ -67,20 +84,19 @@ class Random_Recommender(baseRecommender):
 
 
     def train(self, userid, addition_filter, N=10 ):
-        """ todo add decription
-        """
+
         recommendable_key = self.compute_key(addition_filter)
-        recommendationList_key = self.compute_key(addition_filter, userid)
+        recommendationList_key = self.compute_recommendationsListKey( addition_filter, userid)
 
         recList = []
         i = 0
         if (
             self.get_amount_of_recommendables(
                 recommendable_key) >= N): #we have more items then we have to ignore + we need
-            while (i < N):
+            while i < N:
                 recommendable_item = self.get_recommendable_item(key=recommendable_key)
 
-                if (recommendable_item in recList):
+                if recommendable_item in recList:
                     pass
                 else:
                     recList.append(recommendable_item) # now compose the list of recommendable items
@@ -91,11 +107,10 @@ class Random_Recommender(baseRecommender):
                 recommendable_item = self.get_recommendable_item(key=recommendable_key)
                 recList.append(recommendable_item)
 
-        #print recList
         logging.debug('getting :' + str(N) + " recommendation, which are: " + str(recList))
 
         for value in recList:
-            self.redis_con.zadd(recommendationList_key, value, random.random())
+            self.redis_con.zadd(recommendationList_key, value, random.random()) # we are giving the actual score
 
         return recList
 

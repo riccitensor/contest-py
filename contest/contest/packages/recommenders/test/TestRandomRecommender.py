@@ -1,8 +1,3 @@
-'''
-Created on 23.05.2012
-
-@author: christian.winkelmann@plista.com
-'''
 import unittest
 import redis
 
@@ -25,10 +20,9 @@ class TestRandomRecommender(unittest.TestCase):
 
 	def insertRecommendables(self, additional_filter, N1, N2):
 		fb = Random_Recommender()
-
-
 		for item_id in xrange(N1,N2):
 			fb.set_recommendables( itemid = item_id, additional_filter = additional_filter )
+
 
 	def test_get_recommendable_item(self):
 		fb = Random_Recommender()

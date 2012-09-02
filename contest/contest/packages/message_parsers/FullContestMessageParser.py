@@ -1,10 +1,11 @@
-'''
+"""
 Created on 17.01.2012
 
-This parser suits the task to fully interpret and flatten the json message we get 
+This parser suits the task to fully interpret and flatten the json message we get
 
 @author: christian.winkelmann@plista.com
-'''
+@todo: refactor this into sepearte models
+"""
 
 import json
 from contest.controller.constants import *

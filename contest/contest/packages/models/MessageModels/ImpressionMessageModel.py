@@ -1,8 +1,7 @@
-__author__ = 'karisu'
+# TODO impelement this
 
-from Message import *
 
-class Impression(Message):
+class ImpressionMessageModel(object):
     def __init__(self):
         """ constuctor """
 
