@@ -4,11 +4,11 @@ Created on 27.12.2011
 @author: christian.winkelmann@plista.com
 '''
 import sys
+from contest.worker import QueueBase
+
 sys.path.append("/home/karisu/workspace/plistaContest/src/")
 
 import time
-from contest.config import config_local, config_global
-from contest.packages.queues.QueueBase import QueueBase
 from contest.packages.models.rawJsonModel import rawJsonModel
 
 
