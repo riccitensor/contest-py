@@ -4,11 +4,13 @@ __author__ = 'cw'
 
 import unittest
 import json
+import logging
 
 class TestFullParser(unittest.TestCase):
     def setUp(self):
         '''
         '''
+        logging.basicConfig(filename='plista-contest.log',level=logging.DEBUG)
 
 
     def tearDown(self):

@@ -59,6 +59,10 @@ class Random_Recommender(baseRecommender):
         #
         key = self.compute_recommendationsListKey(constraints, userid)
         resultSet = self.redis_con.zrevrange(key, 0, N - 1, withscores=ranked)
+        if len(resultSet) == 0:
+            key = self.compute_recommendationsListKey(constraints)
+            resultSet = self.redis_con.zrevrange(key, 0, N - 1, withscores=ranked)
+
 
         if remove: self.invalidate_recommended_items(key, resultSet)
 
@@ -77,8 +81,7 @@ class Random_Recommender(baseRecommender):
         recList = []
         i = 0
         if (
-            self.get_amount_of_recommendables(
-                recommendable_key) >= N): #we have more items then we have to ignore + we need
+            self.get_amount_of_recommendables( recommendable_key) >= N): #we have more items then we have to ignore + we need
             while i < N:
                 recommendable_item = self.get_recommendable_item(key=recommendable_key)
 

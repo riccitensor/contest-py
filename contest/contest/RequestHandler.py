@@ -11,7 +11,7 @@ It will delegate the work to other places
 from flask import Flask
 from flask import request
 import logging
-from contest.controller import ProcessMessage
+from contest.controller.ProcessMessage import ProcessMessage
 
 logging.basicConfig(filename='output.log',level=logging.DEBUG)
 

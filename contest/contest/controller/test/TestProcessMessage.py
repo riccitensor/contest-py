@@ -1,11 +1,14 @@
 import unittest
 import json
+import redis
 from contest.controller.ProcessMessage import *
 
 class TestFullParser(unittest.TestCase):
     def setUp(self):
         """
         """
+        self.redis_con = redis.Redis("localhost")
+        self.redis_con.flushall()
 
 
     def tearDown(self):
@@ -23,7 +26,7 @@ class TestFullParser(unittest.TestCase):
         the result has to be non empty and with items among the first if they were recommendable
         """
         recommend_flag = False
-        for i in range(1,20):
+        for i in range(1,200):
             message = self.get_custom_impression_message(
                 id_flag = i, # autoincrement message ids
                 client_id_flag = i % 3, # three users are making the impression
@@ -48,6 +51,8 @@ class TestFullParser(unittest.TestCase):
         # the result has to consist of 4 items
         pm = ProcessMessage(message)
         print pm.result_message
+        self.assertEquals(4, len(pm.result_message)) ## TODO this wrong
+        self.assertEquals(type("string"), type(pm.result_message), "the result message has the wrong type")
 
 
 

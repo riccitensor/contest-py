@@ -78,6 +78,25 @@ class TestRandomRecommender(unittest.TestCase):
 
 
 
+    def test_Get_Recommendation_with_constraint_user_unknown(self):
+        """
+        now the user is unknown
+        """
+        userid = 666
+        N = 3
+        fb = Random_Recommender( )
+        additional_filter_1 = { 'domainid' : 'domain1' }
+        self.insertRecommendables(additional_filter_1, 0, 10)
+        self.insertRecommendables({}, 20, 30)
+
+        fb.train( None, additional_filter_1 ) # train for the specific user and the filter
+
+        resultSet_1 = fb.get_recommendation( userid, additional_filter_1, N=N, remove = False )
+        if self.debug: print resultSet_1
+        self.assertEqual(len(resultSet_1), N, 'the resulting recommendation have the wrong number')
+
+
+
     def test_Get_Recommendation_Ranked(self):
         userid = 123
         N = 3
