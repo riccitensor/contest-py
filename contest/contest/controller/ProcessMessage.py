@@ -6,6 +6,7 @@ Created on 24.08.2012
 @author: christian.winkelmann@plista.com
 '''
 import logging
+from contest.config import config_local
 from contest.controller.ProcessMessage_Impression import ProcessMessage_Impression
 from contest.packages.message_parsers.FullContestMessageParser import FullContestMessageParser
 from contest.controller.constants import *
@@ -20,7 +21,7 @@ from contest.packages.recommenders.Random_Recommender import Random_Recommender
 class ProcessMessage(object):
 
     message = ""
-    result_message = "{}"
+    results = "{}"
 
     def __init__(self, message):
         """ @param message a contest message which has to be parsed and processed
@@ -34,7 +35,7 @@ class ProcessMessage(object):
 
         if message_instance.message_type == MESSAGE_TYPE_IMPRESSION:
             pI = ProcessMessage_Impression(message_instance)
-            self.result_message = pI.result
+            self.results = pI.result
 
         debug = True ## TODO !! local debugging statement
         debug = False
@@ -48,6 +49,37 @@ class ProcessMessage(object):
 
 
 
+    def compose_result_message(self):
+        """ the result has to be somehting like this
+        '{"msg":"result","items":[{"id":48457814},{"id":48387562},{"id":48411046},{"id":48333490}],"team":{"id":"15"},"version":"1.0"}'
+        """
+        items = []
+        for i in self.results:
+            items.append({"id":i})
+
+        message = {"msg":"result",
+                   "items": items,
+                   "team":{"id":config_local.team_id},
+                   "version":config_local.api_version
+        }
+        return json.dumps(message)
+
+
+
+    def get_custom_result_message(self, result_items_list):
+        """ create a custom result message
+        """
+        items = []
+        for i in result_items_list:
+            items.append({"id":i})
+
+
+        message = {"msg":"result",
+                   "items": items,
+                   "team":{"id":22},
+                   "version":1.0
+        }
+        return json.dumps(message)
 
 
 class ProcessMessageWorker(object):

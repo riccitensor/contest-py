@@ -48,7 +48,7 @@ class ProcessMessage_Impression(object):
             domain_id = message.domain_id
             user_id = message.user_id
             limit = message.config_limit
-            result = fb.get_recommendation(user_id, { 'domainid' : domain_id }, limit, remove=True, ranked=True )
+            result = fb.get_recommendation(user_id, { 'domainid' : domain_id }, limit, remove=True, ranked=False )
 
         # TODO start mixing the results
 

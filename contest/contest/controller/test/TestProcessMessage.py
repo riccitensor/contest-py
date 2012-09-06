@@ -15,16 +15,7 @@ class TestFullParser(unittest.TestCase):
         """
         """
 
-
-
-
-    def test_small_Integration(self):
-        """
-        send 10 impressions without any recommendation request
-        send 1 impression with a recommendation request
-
-        the result has to be non empty and with items among the first if they were recommendable
-        """
+    def __import_impressions(self):
         recommend_flag = False
         for i in range(1,200):
             message = self.get_custom_impression_message(
@@ -37,8 +28,7 @@ class TestFullParser(unittest.TestCase):
             )
             ProcessMessage(message)
 
-
-        # compose a recommendation request message
+    def __recommend_message(self):
         message = self.get_custom_impression_message(
             id_flag = 21,
             client_id_flag = 1, # three users are making the impression
@@ -47,14 +37,44 @@ class TestFullParser(unittest.TestCase):
             recommend_flag = True,
             message_json = True
         )
+        pm = ProcessMessage(message)
+
+        return pm
+
+
+    def test_small_Integration(self):
+        """
+        send 10 impressions without any recommendation request
+        send 1 impression with a recommendation request
+
+        the result has to be non empty and with items among the first if they were recommendable
+        """
+        self.__import_impressions()
+        pm = self.__recommend_message()
+
+        # compose a recommendation request message
+
 
         # the result has to consist of 4 items
-        pm = ProcessMessage(message)
-        print pm.result_message
-        self.assertEquals(4, len(pm.result_message)) ## TODO this wrong
-        self.assertEquals(type("string"), type(pm.result_message), "the result message has the wrong type")
+
+        pm.compose_result_message()
+        print pm.results
+        self.assertEquals(4, len(pm.results)) ## TODO this is wrong because the result has to be json
+        self.assertEquals(type([]), type(pm.results), "the result message has the wrong type")
 
 
+
+    def test_compose_result_message(self):
+        """ test if composing a result works
+        """
+        self.__import_impressions()
+        pm = self.__recommend_message()
+
+        result_message = pm.compose_result_message()
+
+        self.assertEqual(type(result_message), type("string"))
+        converted_message = json.loads(result_message)
+        self.assertEqual("result", converted_message["msg"])
 
 
 
@@ -98,18 +118,7 @@ class TestFullParser(unittest.TestCase):
             return message
 
 
-    def get_custom_result_message(self):
 
-
-        message = {"msg":"result",
-                    "items":[
-                        {"id":id_1},
-                        {"id":id_2}
-                    ],
-                    "team":{"id":22},
-                    "version":1.0
-                    }
-        return message
 
 if __name__ == '__main__':
     unittest.main()

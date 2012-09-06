@@ -19,3 +19,6 @@ cassandra_port = 9160
 mysql_host = '192.168.1.34'
 mysql_user = 'karisu'
 mysql_password = '12345'
+
+team_id = 22
+api_version = 1.0
