@@ -1,2 +1,0 @@
-''' tests cassandra features
-'''

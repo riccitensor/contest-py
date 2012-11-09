@@ -15,10 +15,11 @@ cassandra_hosts = ['46.51.176.41', 'localhost'] # this is for pooling, but its n
 cassandra_host = 'localhost'
 cassandra_port = 9160
 
+messaging_debug = True # use this to circumvent the messaging system
 
-mysql_host = '192.168.1.34'
-mysql_user = 'karisu'
-mysql_password = '12345'
+mysql_host = "localhost"
+mysql_user = 'root'
+mysql_password = 'kar--32!'
 
 team_id = 22
 api_version = 1.0

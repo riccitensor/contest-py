@@ -37,15 +37,15 @@ class ProcessMessage(object):
             pI = ProcessMessage_Impression(message_instance)
             self.results = pI.result
 
-        debug = True ## TODO !! local debugging statement
-        debug = False
+        debug = config_local.messaging_debug ## TODO !! local debugging statement
+        #debug = False
         if not debug:
             pMW = ProcessMessageWorker()
             pMW.enqueue(None, message)
         else:
-            pmW = ProcessMessageWorker()
-            pmW.log_data(message_instance)
-            pmW.train_recommender(message_instance)
+            pMW = ProcessMessageWorker()
+            pMW.log_data(message_instance)
+            pMW.train_recommender(message_instance)
 
 
 

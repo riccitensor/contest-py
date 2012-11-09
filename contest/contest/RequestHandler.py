@@ -13,7 +13,7 @@ from flask import request
 import logging
 from contest.controller.ProcessMessage import ProcessMessage
 
-logging.basicConfig(filename='output.log',level=logging.DEBUG)
+logging.basicConfig(filename='Request_Handler.log',level=logging.DEBUG)
 
 
 app = Flask(__name__)
@@ -43,16 +43,31 @@ def test_http_param_ext():
 def incoming_contest_call():
     """
     this accepts the contest messages
-    """    
+    """
+    import json
+    """
+    if request.method == 'POST':
+
+        logging.debug("request.data: " + str(request.data))
+        logging.debug("request.form: " + str(request.form))
+
+        if len(request.data):
+            return str(request.data)
+        else: return str(request.form)
+    """
+
     if request.method == 'POST':
         import urllib
-
-        message = str(request.data)
-        if len(message) < 5 : # since the contest sync message is sent differently then the live messages we need to check both ways
-           message = str(request.form)
-        logging.debug('incoming before unquote:' + str(message))
+        print "test"
+        if len(request.data):
+            message = str(request.data)
+        else: message = str(request.form)
+        print message
+        logging.info('incoming before unquote:' + message)
         message = urllib.unquote(message).decode('utf8')
-        logging.debug('incoming message:' + str(message))
+        logging.info('incoming message:' + message)
+        logging.info('json decode ===================:' + json.loads(message) )
+        #print json.loads(message)
 
         # processing the message
         pM = ProcessMessage(message)
@@ -66,7 +81,8 @@ def incoming_contest_call():
         logging.debug('recommendation message:' + str(result))
         if result is None : return "{error : result_is_empty}"
         else: return result
-        
+
+
 
 app.debug = True
 app.run(host='0.0.0.0', port=5001)
